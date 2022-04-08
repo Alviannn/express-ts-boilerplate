@@ -1,0 +1,21 @@
+{
+    "$schema": "https://json.schemastore.org/tsconfig",
+    "compilerOptions": {
+        "target": "ES6",
+        "module": "CommonJS",
+        "outDir": "./build",
+        "strict": true,
+        "removeComments": true,
+        "moduleResolution": "Node",
+        "esModuleInterop": true,
+        "forceConsistentCasingInFileNames": true,
+        "noFallthroughCasesInSwitch": true,
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
+        // makes the ts compiler faster, but the ts check is less accurate
+        "skipLibCheck": true
+    },
+    "ts-node": {
+        "transpileOnly": true
+    }
+}
