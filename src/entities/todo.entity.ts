@@ -17,12 +17,16 @@ export class Todo extends BaseEntity {
     @Column({
         name: 'created_at',
         type: 'timestamp',
-        default: DateTime.utc(),
         transformer: dateTransformer
     })
-    createdAt!: DateTime;
+    createdAt = DateTime.utc();
 
-    @Column({ name: 'updated_at', type: 'timestamp', nullable: true })
+    @Column({
+        name: 'updated_at',
+        type: 'timestamp',
+        transformer: dateTransformer,
+        nullable: true
+    })
     updatedAt?: DateTime;
 
     @Column({ name: 'is_done', default: false })
