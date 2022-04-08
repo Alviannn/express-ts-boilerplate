@@ -5,7 +5,7 @@ Originally this is made for the Research and Development (RnD) division in BNCC@
 But I decided to make it open-source under my account since I was the one who made it and
 because I have been using it for my projects or other projects that is using this techstack.
 
-To see the tools/dependencies used in this boilerplate, [go here](#dependencies).
+To see the dependencies used in this boilerplate, [go here](#dependencies).
 
 # Entity-Relationship Diagram
 \<insert ERD here>
@@ -50,7 +50,6 @@ To see the tools/dependencies used in this boilerplate, [go here](#dependencies)
      |--validations\     # Schemas for validating JSON requests
      |--app.ts           # Express app and it's configuration
      |--ormconfig.ts     # TypeORM datasource configuration
-     |--seeder.ts        # Populates the database with prepared data
      |--server.ts        # Program entry point (include database )
  |--.eslintrc.json       # ESLint config
  |--tsconfig.json        # TypeScript compiler config
