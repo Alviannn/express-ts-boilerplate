@@ -1,3 +1,5 @@
+import { dateTransformer } from '.';
+import { DateTime } from 'luxon';
 import {
     BaseEntity, Entity,
     Column, PrimaryGeneratedColumn
@@ -20,6 +22,22 @@ export class User extends BaseEntity {
 
     @Column({ length: 64 })
     password!: string;
+
+    @Column({
+        name: 'created_at',
+        type: 'timestamp',
+        transformer: dateTransformer,
+        default: DateTime.utc()
+    })
+    createdAt!: DateTime;
+
+    @Column({
+        name: 'updated_at',
+        type: 'timestamp',
+        transformer: dateTransformer,
+        nullable: true
+    })
+    updatedAt?: DateTime;
 
     filter() {
         const cloned = { ...this } as Record<string, unknown>;

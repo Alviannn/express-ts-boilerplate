@@ -1,13 +1,9 @@
 import { DateTime } from 'luxon';
+import { dateTransformer } from '.';
 import {
     BaseEntity, Entity,
-    Column, PrimaryGeneratedColumn, ValueTransformer,
+    Column, PrimaryGeneratedColumn,
 } from 'typeorm';
-
-const dateTransformer: ValueTransformer = {
-    from: (value: Date) => DateTime.fromJSDate(value),
-    to: (value: DateTime) => value.toJSDate()
-};
 
 @Entity('todos')
 export class Todo extends BaseEntity {
