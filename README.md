@@ -8,7 +8,7 @@ because I have been using it for my projects or other projects that is using thi
 To see the tools/dependencies used in this boilerplate, [go here](#dependencies).
 
 # Entity-Relationship Diagram
-_Insert ERD here_
+\<insert ERD here>
 
 ## Quick Start
 1. Make sure you have installed [Yarn](https://classic.yarnpkg.com/lang/en/) and [PostgreSQL](https://www.postgresql.org/download/).
