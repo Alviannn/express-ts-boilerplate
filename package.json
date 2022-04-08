@@ -7,7 +7,7 @@
     "scripts": {
         "dev": "cross-env NODE_ENV=development ts-node ./src/server.ts",
         "start": "node ./build/server.js",
-        "seed": "cross-env NODE_ENV=development ts-node ./src/seeder.ts",
+        "seed": "cross-env NODE_ENV=development ts-node ./scripts/seeder.ts",
         "clean": "rimraf ./build",
         "typeorm": "typeorm-ts-node-commonjs --transpileOnly",
         "jwt:generate": "ts-node ./scripts/jwt-generate.ts",
