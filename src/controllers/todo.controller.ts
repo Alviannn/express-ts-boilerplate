@@ -5,6 +5,7 @@ import { Controller, Route } from '../decorators/express.decorator';
 import { Todo } from '../entities/todo.entity';
 import { sendResponse, ResponseError } from '../utils/api.util';
 import { StatusCodes } from 'http-status-codes';
+import { DateTime } from 'luxon';
 import {
     newTodoSchema,
     updateTodoSchema,
@@ -54,6 +55,7 @@ export class TodosRoute {
 
         todo.content = content ?? todo.content;
         todo.isDone = isDone ?? todo.isDone;
+        todo.updatedAt = DateTime.utc();
 
         await todo.save();
         return sendResponse(res, { message: 'Successfully updated todo' });
