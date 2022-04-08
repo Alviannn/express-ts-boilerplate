@@ -21,7 +21,7 @@ export class Todo extends BaseEntity {
     @Column({
         name: 'created_at',
         type: 'timestamp',
-        default: DateTime.now(),
+        default: DateTime.utc(),
         transformer: dateTransformer
     })
     createdAt!: DateTime;
