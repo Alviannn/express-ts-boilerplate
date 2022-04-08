@@ -129,6 +129,9 @@ DB_PASSWORD=
    * Allows the frontend devs to access the backend.
 1. [helmet](https://www.npmjs.com/package/helmet)
    * Secures the backend HTTP headers.
+1. [compression](https://www.npmjs.com/package/compression)
+   * Compression middleware.
+   * It compresses the server response with GZIP, the client will then receive the responses in smaller size of data.
 1. [http-status-codes](https://www.npmjs.com/package/http-status-codes) <br>
    * To avoid _magic numbers_ and use constants enum. Ex: Using `BAD_REQUEST` instead of `400`.
 1. [joi](https://www.npmjs.com/package/joi) <br>
