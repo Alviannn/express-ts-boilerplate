@@ -23,8 +23,8 @@ export const REFRESH_TOKEN_LIST: string[] = [];
 
 // ------------------------------------------------------------------------ //
 
-export function hashPassword(password: string) {
-    return bcrypt.hashSync(password, config.hashRounds);
+export async function hashPassword(password: string) {
+    return bcrypt.hash(password, config.hashRounds);
 }
 
 export function generateToken(user: User | UserPayload, tokenType: TokenType) {

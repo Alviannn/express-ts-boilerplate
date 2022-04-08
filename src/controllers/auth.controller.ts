@@ -1,6 +1,5 @@
 import bcrypt from 'bcrypt';
 import validate from '../middlewares/validate.middleware';
-import config from '../configs/config';
 import authenticate from '../middlewares/authenticate.middleware';
 
 import { Request, Response } from 'express';
@@ -12,6 +11,7 @@ import {
     generateToken,
     getPayloadFromHeader,
     getTokenFromHeader,
+    hashPassword,
     REFRESH_TOKEN_LIST
 } from '../utils/auth.util';
 import {
@@ -64,11 +64,7 @@ export class AuthRoute {
                 StatusCodes.BAD_REQUEST);
         }
 
-        const hashedPassword = await bcrypt.hash(
-            user.password,
-            config.hashRounds);
-
-        user.password = hashedPassword;
+        user.password = await hashPassword(user.password);
         await User.save(user);
 
         return sendResponse(res, {
