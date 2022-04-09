@@ -37,22 +37,23 @@ To see the dependencies used in this boilerplate, [go here](#dependencies).
 ## Project Structure
 ```
 <your project>\
- |--scripts\             # User scripts for automating
- |--src\                 # Source folder
-     |--configs\         # Application configs
-     |--controllers\     # Routes and controllers
-     |--decorators\      # Custom decorators
-     |--entities\        # Database models/entities (represents table)
-     |--middlewares\     # Custom middlewares
-     |--routes\          # Server routes, provides automatic routing
-     |--typings\         # Custom types/interface for type assertion
-     |--utils\           # Utility functions and/or classes
-     |--validations\     # Schemas for validating JSON requests
-     |--app.ts           # Express app and it's configuration
-     |--ormconfig.ts     # TypeORM datasource configuration
-     |--server.ts        # Program entry point (include database )
- |--.eslintrc.json       # ESLint config
- |--tsconfig.json        # TypeScript compiler config
+ |--scripts\              # User scripts for automating
+ |--src\                  # Source folder
+    |--configs\           # Application configs
+    |--controllers\       # Routes and controllers
+    |--database\          # Database related code
+        |--entities\      # Database models/entities (represents table)
+        |--ormconfig.ts   # TypeORM datasource configuration
+    |--decorators\        # Custom decorators
+    |--middlewares\       # Custom middlewares
+    |--routes\            # Server routes, provides automatic routing
+    |--typings\           # Custom types/interface for type assertion
+    |--utils\             # Utility functions and/or classes
+    |--validations\       # Schemas for validating JSON requests
+    |--app.ts             # Express app and it's configuration
+    |--server.ts          # Program entry point (include database )
+ |--.eslintrc.json        # ESLint config
+ |--tsconfig.json         # TypeScript compiler config
  |--...
 ```
 
