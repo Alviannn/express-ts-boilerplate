@@ -4,8 +4,8 @@ import authenticate from '../middlewares/authenticate.middleware';
 
 import { Request, Response } from 'express';
 import { Controller, Route } from '../decorators/express.decorator';
-import { User } from '../entities/user.entity';
-import { RefreshToken } from '../entities/refresh-token.entity';
+import { User } from '../database/entities/user.entity';
+import { RefreshToken } from '../database/entities/refresh-token.entity';
 import { sendResponse, ResponseError } from '../utils/api.util';
 import { StatusCodes } from 'http-status-codes';
 import {

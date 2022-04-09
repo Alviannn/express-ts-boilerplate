@@ -3,8 +3,8 @@ import config from '../configs/config';
 import bcrypt from 'bcrypt';
 
 import { Request } from 'express';
-import { User } from '../entities/user.entity';
-import { RefreshToken } from '../entities/refresh-token.entity';
+import { User } from '../database/entities/user.entity';
+import { RefreshToken } from '../database/entities/refresh-token.entity';
 
 // ------------------------------------------------------------------------ //
 

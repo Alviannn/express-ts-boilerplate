@@ -2,7 +2,7 @@ import authenticate from '../middlewares/authenticate.middleware';
 
 import { Request, Response } from 'express';
 import { Controller, Route } from '../decorators/express.decorator';
-import { User } from '../entities/user.entity';
+import { User } from '../database/entities/user.entity';
 import { sendResponse, Errors } from '../utils/api.util';
 import { getPayloadFromHeader } from '../utils/auth.util';
 

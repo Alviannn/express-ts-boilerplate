@@ -2,7 +2,7 @@ import validate from '../middlewares/validate.middleware';
 
 import { Request, Response } from 'express';
 import { Controller, Route } from '../decorators/express.decorator';
-import { Todo } from '../entities/todo.entity';
+import { Todo } from '../database/entities/todo.entity';
 import { sendResponse, ResponseError } from '../utils/api.util';
 import { StatusCodes } from 'http-status-codes';
 import { DateTime } from 'luxon';
