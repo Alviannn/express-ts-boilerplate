@@ -11,9 +11,9 @@ export class UserRoute {
 
     @Controller('GET', '/profile', authenticate())
     async profile(req: Request, res: Response) {
-        const payload = getPayloadFromHeader(req)!;
+        const payload = await getPayloadFromHeader(req);
 
-        const user = await User.findOneBy({ id: payload.id });
+        const user = await User.findOneBy({ id: payload!.id });
         if (!user) {
             throw Errors.NO_SESSION;
         }
