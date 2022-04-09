@@ -8,5 +8,6 @@ export function executeCommand(command: string, args?: string[]) {
     });
 }
 
-export const DATASOURCE_PATH = './src/ormconfig.ts';
+export const DATASOURCE_PATH = './src/database/ormconfig.ts';
+export const MIGRATIONS_DIR_PATH = './src/database/migrations';
 export const ORM_CMD = 'yarn typeorm';
