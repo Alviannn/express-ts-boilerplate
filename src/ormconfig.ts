@@ -7,6 +7,15 @@ type ORMPathType = 'entities' | 'migrations' | 'subscribers';
 
 /**
  * Provides the path to the specific ORM directories
+ *
+ * With this we can generate all ORM directories path
+ * for either development or production environment.
+ *
+ * For development environment:
+ * * It accepts from the `src` folder and searches for `.ts` files
+ *
+ * For production environment:
+ * * It accepts from the `dist` folder and searches for `.js` files
  */
 function pathToLoadORM(type: ORMPathType) {
     const startDir = (config.development ? 'src' : 'dist');
