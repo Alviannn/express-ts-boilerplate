@@ -97,8 +97,20 @@ TypeORM:
 # shows TypeORM commands
 yarn typeorm -h
 
-# example: shows the migration status
-yarn typeorm migration:show
+# shows migration status
+yarn migration:show
+
+# generates a migration based recent schema changes
+yarn migration:generate <migration-name>
+
+# creates a new migration
+yarn migration:create <migration-name>
+
+# runs all pending migrations
+yarn migration:run
+
+# reverts all migrations
+yarn migration:revert
 ```
 
 JSONWebToken:
