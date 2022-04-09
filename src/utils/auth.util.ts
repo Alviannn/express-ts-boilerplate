@@ -1,9 +1,10 @@
 import jwt from 'jsonwebtoken';
 import config from '../configs/config';
+import bcrypt from 'bcrypt';
 
 import { Request } from 'express';
 import { User } from '../entities/user.entity';
-import bcrypt from 'bcrypt';
+import { RefreshToken } from '../entities/refresh-token.entity';
 
 // ------------------------------------------------------------------------ //
 
@@ -16,18 +17,13 @@ export type UserPayload = {
 
 // ------------------------------------------------------------------------ //
 
-/**
- * TODO: Use proper storage
- */
-export const REFRESH_TOKEN_LIST: string[] = [];
-
-// ------------------------------------------------------------------------ //
-
 export async function hashPassword(password: string) {
     return bcrypt.hash(password, config.hashRounds);
 }
 
-export function generateToken(user: User | UserPayload, tokenType: TokenType) {
+export async function generateToken(
+    user: User | UserPayload, tokenType: TokenType) {
+
     let tokenSecret: string;
     const signOption: jwt.SignOptions = { notBefore: config.jwt.notBefore };
     const payload: UserPayload = { id: user.id, email: user.email };
@@ -42,7 +38,8 @@ export function generateToken(user: User | UserPayload, tokenType: TokenType) {
 
     const token = jwt.sign(payload, tokenSecret, signOption);
     if (tokenType === 'REFRESH') {
-        REFRESH_TOKEN_LIST.push(token);
+        const newToken = RefreshToken.create({ token });
+        await newToken.save();
     }
 
     return token;
@@ -79,7 +76,7 @@ export function getTokenFromHeader(req: Request) {
  *
  * @throws If the {@link tokenType} incorrect {@link TokenType}
  */
-export function getPayloadFromHeader(
+export async function getPayloadFromHeader(
     req: Request, tokenType: TokenType = 'ACCESS') {
 
     const token = getTokenFromHeader(req);
@@ -99,7 +96,7 @@ export function getPayloadFromHeader(
             throw Error('Token type is not defined');
     }
 
-    if (tokenType === 'REFRESH' && !REFRESH_TOKEN_LIST.includes(token)) {
+    if (tokenType === 'REFRESH' && !RefreshToken.findOneBy({ token })) {
         return;
     }
 

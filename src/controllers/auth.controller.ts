@@ -5,14 +5,14 @@ import authenticate from '../middlewares/authenticate.middleware';
 import { Request, Response } from 'express';
 import { Controller, Route } from '../decorators/express.decorator';
 import { User } from '../entities/user.entity';
+import { RefreshToken } from '../entities/refresh-token.entity';
 import { sendResponse, ResponseError } from '../utils/api.util';
 import { StatusCodes } from 'http-status-codes';
 import {
     generateToken,
     getPayloadFromHeader,
     getTokenFromHeader,
-    hashPassword,
-    REFRESH_TOKEN_LIST
+    hashPassword
 } from '../utils/auth.util';
 import {
     loginSchema, registerSchema,
@@ -75,12 +75,12 @@ export class AuthRoute {
 
     @Controller('POST', '/refresh', authenticate('REFRESH'))
     async refresh(req: Request, res: Response) {
-        const userPayload = getPayloadFromHeader(req, 'REFRESH')!;
+        const userPayload = await getPayloadFromHeader(req, 'REFRESH');
 
         return sendResponse(res, {
             message: 'Successfully refreshed new token',
             data: {
-                accessToken: generateToken(userPayload, 'ACCESS')
+                accessToken: generateToken(userPayload!, 'ACCESS')
             }
         });
     }
@@ -88,9 +88,9 @@ export class AuthRoute {
     @Controller('DELETE', '/logout', authenticate('REFRESH'))
     async logout(req: Request, res: Response) {
         const token = getTokenFromHeader(req)!;
-        const idx = REFRESH_TOKEN_LIST.indexOf(token);
 
-        REFRESH_TOKEN_LIST.splice(idx);
+        const foundToken = await RefreshToken.findOneBy({ token });
+        await foundToken?.remove();
 
         return sendResponse(res, {
             statusCode: StatusCodes.ACCEPTED,
