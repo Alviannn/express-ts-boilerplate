@@ -114,8 +114,14 @@ Found in the `.env` file
 JWT_ACCESS_SECRET=
 JWT_REFRESH_SECRET=
 
+# access token expire time
+JWT_ACCESS_EXPIRE=15m
+# refresh token expire time
+JWT_REFRESH_EXPIRE=30d
+
 # the postgres database credentials
 DB_HOST=
+DB_PORT=5432
 DB_DATABASE=
 DB_USERNAME=
 DB_PASSWORD=
