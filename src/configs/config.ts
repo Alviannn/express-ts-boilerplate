@@ -17,8 +17,8 @@ const config = {
         accessSecret: env.JWT_ACCESS_SECRET!,
         refreshSecret: env.JWT_REFRESH_SECRET!,
 
-        accessExpire: '15m',
-        refreshExpire: '30d',
+        accessExpire: env.JWT_ACCESS_EXPIRE!,
+        refreshExpire: env.JWT_REFRESH_EXPIRE!,
 
         notBefore: '3s'
     },
