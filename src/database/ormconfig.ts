@@ -1,5 +1,5 @@
 import 'reflect-metadata';
-import config from './configs/config';
+import config from '../configs/config';
 
 import { DataSource } from 'typeorm';
 
@@ -19,22 +19,23 @@ type ORMPathType = 'entities' | 'migrations' | 'subscribers';
  */
 function pathToLoadORM(type: ORMPathType) {
     const startDir = (config.development ? 'src' : 'dist');
-    const lastExtension = (config.development ? 'ts' : 'js');
 
-    let middleExtension: string;
+    let middleExt: string;
+    const lastExt = (config.development ? 'ts' : 'js');
+
     switch (type) {
         case 'entities':
-            middleExtension = 'entity';
+            middleExt = 'entity';
             break;
         case 'migrations':
-            middleExtension = 'migration';
+            middleExt = 'migration';
             break;
         case 'subscribers':
-            middleExtension = 'subscriber';
+            middleExt = 'subscriber';
             break;
     }
 
-    return `${startDir}/${type}/**/*.${middleExtension}.${lastExtension}`;
+    return `${startDir}/database/${type}/**/*.${middleExt}.${lastExt}`;
 }
 
 export const appDataSource = new DataSource({
