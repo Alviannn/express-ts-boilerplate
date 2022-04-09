@@ -9,12 +9,15 @@
         "start": "node ./build/server.js",
         "seed": "cross-env NODE_ENV=development ts-node ./scripts/seeder.ts",
         "clean": "rimraf ./build",
-        "typeorm": "typeorm-ts-node-commonjs --transpileOnly",
         "jwt:generate": "ts-node ./scripts/jwt-generate.ts",
         "compile": "yarn clean && tsc",
         "compile:debug": "yarn compile --diagnostics",
         "lint": "eslint ./src",
-        "lint:fix": "eslint ./src --fix"
+        "lint:fix": "eslint ./src --fix",
+        "typeorm": "typeorm-ts-node-commonjs",
+        "migration:show": "yarn typeorm migration:show -d ./src/ormconfig.ts",
+        "migration:generate": "ts-node ./scripts/migrations.ts GENERATE",
+        "migration:create": "ts-node ./scripts/migrations.ts CREATE"
     },
     "devDependencies": {
         "@types/bcrypt": "^5.0.0",
