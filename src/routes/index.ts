@@ -7,6 +7,9 @@
  ***                                                                     ***
  ***************************************************************************/
 
+import fs from 'fs';
+import path from 'node:path';
+
 import { Router, Request, Response, NextFunction } from 'express';
 import { routerMap } from '../decorators/express.decorator';
 import { ANSI } from '../utils/ansi.util';
@@ -17,9 +20,6 @@ import {
     RouteDataType,
     RouterHandlerType
 } from '../typings/router';
-
-import fs from 'fs';
-import nodePath from 'node:path';
 
 /**
  * Wraps the {@link HandlerFunction} inside a {@link Promise}.
@@ -32,8 +32,13 @@ import nodePath from 'node:path';
  * we can use it to "catch" the error then pass it to `next`.
  */
 function handlerWrapAsync(handler: HandlerFunction): AsyncHandlerWrapper {
-    return (req: Request, res: Response, next: NextFunction) =>
-        Promise.resolve(handler(req, res, next)).catch((err) => next(err));
+    return async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            await handler(req, res, next);
+        } catch (err) {
+            next(err);
+        }
+    };
 }
 
 function registerController(
@@ -41,22 +46,21 @@ function registerController(
     routerData: RouteDataType,
     controllerData: ControllerDataType) {
 
-    const { path, middlewares, handlerName, method } = controllerData;
-    const REQUEST_METHODS = ['GET', 'POST', 'DELETE', 'PUT', 'PATCH'];
-
-    // Invalid methods shouldn't be accepted
-    if (!REQUEST_METHODS.includes(method)) {
-        return;
-    }
+    const {
+        path: routePath,
+        middlewares,
+        handlerName,
+        method
+    } = controllerData;
 
     const mainHandler = routerData.targetObj[handlerName] as HandlerFunction;
     const handlerList = [...middlewares, mainHandler]
         .map((handler) => handlerWrapAsync(handler));
 
     const methodName = method.toLowerCase();
-    router[methodName](path, ...handlerList);
+    router[methodName](routePath, ...handlerList);
 
-    const msg = `{color}${method} \t${routerData.path}${path}{reset}`
+    const msg = `{color}${method} \t${routerData.path}${routePath}{reset}`
         .replace('{color}', ANSI.GREEN)
         .replace('{reset}', ANSI.RESET);
 
@@ -101,23 +105,23 @@ function registerRouters(globalRouter: Router) {
  * In TS, it's a bit tricky to import dynamically,
  * therefore it's an async function.
  */
-async function importRoutes(path: string) {
-    const isDir = fs.lstatSync(path).isDirectory();
+async function importRoutes(filePath: string) {
+    const isDir = fs.lstatSync(filePath).isDirectory();
     if (isDir) {
-        const files = fs.readdirSync(path);
+        const files = fs.readdirSync(filePath);
         const promises: Promise<unknown>[] = [];
 
         for (const file of files) {
-            const fullPath = nodePath.join(path, file);
+            const fullPath = path.join(filePath, file);
             promises.push(importRoutes(fullPath));
         }
 
         await Promise.all(promises);
-    } else if (path.includes('.controller.')) {
+    } else if (filePath.includes('.controller.')) {
         // Importing based on the complete path won't work,
         // using the `resolve` function will make it like
         // how you used to import a local module.
-        await import(nodePath.resolve(path));
+        await import(path.resolve(filePath));
     }
 }
 
@@ -128,7 +132,7 @@ async function importRoutes(path: string) {
  * we can make use of the {@link Router} to achieve that.
  */
 export async function createGlobalRouter(): Promise<Router> {
-    const controllersDir = nodePath.join(__dirname, '..', 'controllers/');
+    const controllersDir = path.join(__dirname, '..', 'controllers/');
     await importRoutes(controllersDir);
 
     const router = Router();
