@@ -30,9 +30,21 @@ export function validate(schema: ObjectSchema, type: ValidationType = 'BODY') {
                 break;
         }
 
-        const { error } = schema.validate(targetToValidate);
+        const { value, error } = schema.validate(targetToValidate);
         if (error) {
             throw new ResponseError(error.message, StatusCodes.BAD_REQUEST);
+        }
+
+        switch (type) {
+            case 'BODY':
+                req.body = value;
+                break;
+            case 'PARAMS':
+                req.params = value;
+                break;
+            case 'QUERY':
+                req.query = value;
+                break;
         }
 
         return next();
