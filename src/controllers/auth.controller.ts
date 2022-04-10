@@ -17,7 +17,7 @@ import {
 import {
     loginSchema, registerSchema,
     LoginType, RegisterType
-} from '../validations/user.validations';
+} from '../validations/user.validation';
 
 @Route({ path: 'auth' })
 export class AuthRoute {

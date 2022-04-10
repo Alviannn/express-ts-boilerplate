@@ -13,7 +13,7 @@ import {
     NewTodoType,
     UpdateTodoType,
     TodoIdType
-} from '../validations/todo.validations';
+} from '../validations/todo.validation';
 
 const TodoNotFoundError = new ResponseError(
     'Cannot find todo',
