@@ -7,11 +7,6 @@ import { sendResponse } from '../utils/api.util';
 import { StatusCodes } from 'http-status-codes';
 import { authService } from '../services/auth.service';
 import {
-    generateToken,
-    getPayloadFromHeader,
-    getTokenFromHeader,
-} from '../utils/auth.util';
-import {
     loginSchema, registerSchema,
     LoginType, RegisterType
 } from '../validations/user.validation';
@@ -43,8 +38,8 @@ export class AuthRoute {
 
     @Controller('POST', '/refresh', authenticate('REFRESH'))
     async refresh(req: Request, res: Response) {
-        const userPayload = await getPayloadFromHeader(req, 'REFRESH');
-        const accessToken = generateToken(userPayload!, 'ACCESS');
+        const payload = await authService.getPayloadFromHeader(req, 'REFRESH');
+        const accessToken = authService.generateToken(payload!, 'ACCESS');
 
         return sendResponse(res, {
             message: 'Successfully refreshed new token',
@@ -54,7 +49,7 @@ export class AuthRoute {
 
     @Controller('DELETE', '/logout', authenticate('REFRESH'))
     async logout(req: Request, res: Response) {
-        const token = getTokenFromHeader(req)!;
+        const token = authService.getTokenFromHeader(req)!;
         await authService.logout(token);
 
         return sendResponse(res, {
