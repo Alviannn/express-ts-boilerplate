@@ -13,21 +13,21 @@ export type TodoIdType = {
     todoId: number
 }
 
-export const newTodoSchema = joi.object({
+export const newTodoSchema = joi.object<NewTodoType>({
     content: joi.string()
         .min(5)
         .max(512)
         .required()
 });
 
-export const updateTodoSchema = joi.object({
+export const updateTodoSchema = joi.object<UpdateTodoType>({
     content: joi.string()
         .min(5)
         .max(512),
     isDone: joi.boolean()
 });
 
-export const todoIdSchema = joi.object({
+export const todoIdSchema = joi.object<TodoIdType>({
     todoId: joi.number()
         .min(0)
         .required()

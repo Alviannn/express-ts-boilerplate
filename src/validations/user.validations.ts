@@ -1,4 +1,4 @@
-import joi, { ObjectSchema } from 'joi';
+import joi from 'joi';
 
 function validatePhone(val: string) {
     const res = val.match(/[0-9]+/g);
@@ -36,7 +36,7 @@ export type RegisterType = LoginType & {
     phone: string
 }
 
-export const loginSchema = joi.object({
+export const loginSchema = joi.object<LoginType>({
     email: joi.string()
         .max(64)
         .email()
@@ -46,9 +46,9 @@ export const loginSchema = joi.object({
         .min(8)
         .max(64)
         .required()
-}) as ObjectSchema<LoginType>;
+});
 
-export const registerSchema = joi.object({
+export const registerSchema = joi.object<RegisterType>({
     email: joi.string()
         .max(64)
         .email()
@@ -67,4 +67,4 @@ export const registerSchema = joi.object({
         .rule({ message: '{#label} must only be numbers' })
 
         .required()
-}) as ObjectSchema<RegisterType>;
+});
