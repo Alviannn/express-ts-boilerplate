@@ -1,7 +1,7 @@
 name: Check Node application
 on: [push]
 jobs:
-  build:
+  lint:
     runs-on: ubuntu-latest
 
     steps:
@@ -18,6 +18,21 @@ jobs:
 
       - name: Lint project
         run: yarn lint
+
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+          cache: 'yarn'
+
+      - name: Install dependencies
+        run: yarn install
 
       - name: Compile project
         run: yarn compile
