@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt';
-import validate from '../middlewares/validate.middleware';
 import authenticate from '../middlewares/authenticate.middleware';
 
+import { validate } from '../middlewares/validate.middleware';
 import { Request, Response } from 'express';
 import { Controller, Route } from '../decorators/express.decorator';
 import { User } from '../database/entities/user.entity';

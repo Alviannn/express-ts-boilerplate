@@ -3,33 +3,38 @@ import { StatusCodes } from 'http-status-codes';
 import { ResponseError } from '../utils/api.util';
 import { ObjectSchema } from 'joi';
 
+export type ValidationType = 'BODY' | 'PARAMS' | 'QUERY';
+
 /**
  * Validates a request from client
  * within the middleware instead of from each controllers.
  *
  * @param schema the schema to be validated
- * @param isParams go for `true` to validate `params` property, or
- *          go `false` to validate `body` property
- *          within the {@link Request request}.
+ * @param type selects which part of the request should be validated.
+ *             it defaults the `BODY` since we're mostly going to
+ *             check the request body.
  */
-function validate(schema: ObjectSchema, isParams = false) {
+export function validate(schema: ObjectSchema, type: ValidationType = 'BODY') {
     return (req: Request, _: Response, next: NextFunction) => {
 
-        const targetToValidate = (isParams ? req.params : req.body);
-        const { value, error } = schema.validate(targetToValidate);
-
-        if (error) {
-            throw new ResponseError(error.message, StatusCodes.BAD_REQUEST);
+        let targetToValidate;
+        switch (type) {
+            case 'BODY':
+                targetToValidate = req.body;
+                break;
+            case 'PARAMS':
+                targetToValidate = req.params;
+                break;
+            case 'QUERY':
+                targetToValidate = req.query;
+                break;
         }
 
-        if (isParams) {
-            req.params = value;
-        } else {
-            req.body = value;
+        const { error } = schema.validate(targetToValidate);
+        if (error) {
+            throw new ResponseError(error.message, StatusCodes.BAD_REQUEST);
         }
 
         return next();
     };
 }
-
-export default validate;

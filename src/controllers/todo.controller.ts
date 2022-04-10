@@ -1,5 +1,4 @@
-import validate from '../middlewares/validate.middleware';
-
+import { validate } from '../middlewares/validate.middleware';
 import { Request, Response } from 'express';
 import { Controller, Route } from '../decorators/express.decorator';
 import { Todo } from '../database/entities/todo.entity';
@@ -42,7 +41,7 @@ export class TodosRoute {
     @Controller(
         'PATCH', '/update/:todoId',
         validate(updateTodoSchema),
-        validate(todoIdSchema, true)
+        validate(todoIdSchema, 'PARAMS')
     )
     async update(req: Request, res: Response) {
         const { content, isDone } = req.body as UpdateTodoType;
@@ -61,7 +60,7 @@ export class TodosRoute {
         return sendResponse(res, { message: 'Successfully updated todo' });
     }
 
-    @Controller('DELETE', '/delete/:todoId', validate(todoIdSchema, true))
+    @Controller('DELETE', '/delete/:todoId', validate(todoIdSchema, 'PARAMS'))
     async delete(req: Request, res: Response) {
         const { todoId } = req.params as unknown as TodoIdType;
         const todo = await Todo.findOneBy({ id: todoId });
@@ -74,7 +73,7 @@ export class TodosRoute {
         return sendResponse(res, { message: 'Successfully deleted a todo' });
     }
 
-    @Controller('GET', '/:todoId', validate(todoIdSchema, true))
+    @Controller('GET', '/:todoId', validate(todoIdSchema, 'PARAMS'))
     async getById(req: Request, res: Response) {
         const { todoId } = req.params as unknown as TodoIdType;
         const todo = await Todo.findOneBy({ id: todoId });
