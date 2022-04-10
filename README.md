@@ -47,11 +47,12 @@ To see the dependencies used in this boilerplate, [go here](#dependencies).
     |--decorators\        # Custom decorators
     |--middlewares\       # Custom middlewares
     |--routes\            # Server routes, provides automatic routing
+    |--service\           # Business logic (service layer)
     |--typings\           # Custom types/interface for type assertion
     |--utils\             # Utility functions and/or classes
     |--validations\       # Schemas for validating JSON requests
     |--app.ts             # Express app and it's configuration
-    |--server.ts          # Program entry point (include database )
+    |--server.ts          # Program entry point (include database)
  |--.eslintrc.json        # ESLint config
  |--tsconfig.json         # TypeScript compiler config
  |--...
