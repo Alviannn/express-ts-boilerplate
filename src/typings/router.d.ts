@@ -55,40 +55,40 @@ declare type RouterHandlerType = Record<string, RouterFunction>
 /**
  * Stores the information from `Route` decorator.
  */
-declare type RouteDataType = {
-    path: string,
-    middlewares: HandlerFunction[],
+declare interface RouteDataType {
+    path: string;
+    middlewares: HandlerFunction[];
     /**
      * The class that holds the `Route` is stored here
      * so we can grab the functions (the `Controller`) within it.
      */
-    targetObj: Record<string, HandlerFunction>
+    targetObj: Record<string, HandlerFunction>;
 }
 
 /**
  * Stores the information from `Controller` decorator.
  */
-declare type ControllerDataType = {
-    path: string,
-    method: RequestMethods,
+declare interface ControllerDataType {
+    path: string;
+    method: RequestMethods;
     /**
      * The method name for the `Controller` is stored
      * so grab the method from the class with `Route` decorator.
      *
      * This is connected with the {@link RouteDataType.targetObj}
      */
-    handlerName: string,
-    middlewares: HandlerFunction[]
+    handlerName: string;
+    middlewares: HandlerFunction[];
 }
 
 // ---------------------------------------------------- //
 
-declare type RouterMap = {
-    routes: Record<string, RouteDataType>,
-    controllers: Record<string, ControllerDataType[]>
+declare interface RouterMap {
+    routes: Record<string, RouteDataType>;
+    controllers: Record<string, ControllerDataType[]>;
 }
 
-declare type RouterOptions = {
+declare interface RouterOptions {
     /**
      * The API major version, changing this for example to `2`
      * means that the API endpoint have a new big/major changes.
@@ -112,14 +112,14 @@ declare type RouterOptions = {
      *
      * @default 1
      */
-    version?: number,
+    version?: number;
     /**
      * The route should accept a request from a "path".
      *
      * Let's say the value is `example`, then the endpoint starts with:
      * `/v1/example`
      */
-    path: string,
+    path: string;
     /**
      * The middlewares for this route.
      *
@@ -128,5 +128,5 @@ declare type RouterOptions = {
      *
      * @default []
      */
-    middlewares?: HandlerFunction[]
-};
+    middlewares?: HandlerFunction[];
+}

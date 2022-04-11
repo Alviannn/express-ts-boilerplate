@@ -1,11 +1,11 @@
 import { Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 
-export type APIResponse<T = unknown> = {
-    statusCode?: StatusCodes,
-    success?: boolean,
-    message: string,
-    data?: T
+export interface APIResponse<T = unknown> {
+    statusCode?: StatusCodes;
+    success?: boolean;
+    message: string;
+    data?: T;
 }
 
 /**

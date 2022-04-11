@@ -1,16 +1,16 @@
 import joi from 'joi';
 
-export type NewTodoType = {
-    content: string
+export interface NewTodoType {
+    content: string;
 }
 
-export type UpdateTodoType = {
-    content?: string,
-    isDone?: boolean
+export interface UpdateTodoType {
+    content?: string;
+    isDone?: boolean;
 }
 
-export type TodoIdType = {
-    todoId: number
+export interface TodoIdType {
+    todoId: number;
 }
 
 export const newTodoSchema = joi.object<NewTodoType>({
