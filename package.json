@@ -55,7 +55,7 @@
         "morgan": "^1.10.0",
         "pg": "^8.7.3",
         "reflect-metadata": "^0.1.13",
-        "typeorm": "^0.3.5",
+        "typeorm": "^0.3.6",
         "winston": "^3.7.2",
         "winston-daily-rotate-file": "^4.6.1"
     }
