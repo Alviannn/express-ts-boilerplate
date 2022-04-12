@@ -1,6 +1,6 @@
 import dotenv from 'dotenv';
 
-import { CorsOptions } from 'cors';
+import type { CorsOptions } from 'cors';
 
 dotenv.config();
 

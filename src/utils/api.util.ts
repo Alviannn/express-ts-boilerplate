@@ -1,5 +1,6 @@
-import { Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
+
+import type { Response } from 'express';
 
 export interface APIResponse<T = unknown> {
     statusCode?: StatusCodes;

@@ -6,10 +6,9 @@ import { Controller, Route } from '../decorators/express.decorator';
 import { sendResponse } from '../utils/api.util';
 import { StatusCodes } from 'http-status-codes';
 import { authService } from '../services/auth.service';
-import {
-    loginSchema, registerSchema,
-    LoginType, RegisterType
-} from '../validations/user.validation';
+import { loginSchema, registerSchema } from '../validations/user.validation';
+
+import type { LoginType, RegisterType } from '../validations/user.validation';
 
 @Route({ path: 'auth' })
 export class AuthRoute {

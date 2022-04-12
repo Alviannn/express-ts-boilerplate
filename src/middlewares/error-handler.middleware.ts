@@ -1,11 +1,12 @@
 import logger from '../utils/logger.util';
 
-import { Request, Response, NextFunction } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import {
     ResponseError,
     sendResponse, Errors
 } from '../utils/api.util';
+
+import type { Request, Response, NextFunction } from 'express';
 
 function errorHandling(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars

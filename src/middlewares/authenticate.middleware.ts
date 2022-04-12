@@ -1,7 +1,8 @@
-import { NextFunction, Request, Response } from 'express';
 import { authService } from '../services/auth.service';
-import { TokenType } from '../typings/auth';
 import { Errors } from '../utils/api.util';
+
+import type { NextFunction, Request, Response } from 'express';
+import type { TokenType } from '../typings/auth';
 
 /**
  * Handles user authentication

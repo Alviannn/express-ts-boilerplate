@@ -1,7 +1,8 @@
-import { NextFunction, Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import { ResponseError } from '../utils/api.util';
-import { ObjectSchema } from 'joi';
+
+import type { NextFunction, Request, Response } from 'express';
+import type { ObjectSchema } from 'joi';
 
 export type ValidationType = 'BODY' | 'PARAMS' | 'QUERY';
 

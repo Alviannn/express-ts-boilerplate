@@ -4,16 +4,18 @@ import { Controller, Route } from '../decorators/express.decorator';
 import { Todo } from '../database/entities/todo.entity';
 import { sendResponse } from '../utils/api.util';
 import { StatusCodes } from 'http-status-codes';
+import { todoService } from '../services/todo.service';
 import {
     newTodoSchema,
     updateTodoSchema,
-    todoIdSchema,
+    todoIdSchema
+} from '../validations/todo.validation';
 
+import type {
     NewTodoType,
     UpdateTodoType,
     TodoIdType
 } from '../validations/todo.validation';
-import { todoService } from '../services/todo.service';
 
 @Route({ path: 'todos' })
 export class TodosRoute {

@@ -10,10 +10,12 @@
 import fs from 'fs';
 import path from 'node:path';
 
-import { Router, Request, Response, NextFunction } from 'express';
+import { Router } from 'express';
 import { routerMap } from '../decorators/express.decorator';
 import { ANSI } from '../utils/ansi.util';
-import {
+
+import type { Request, Response, NextFunction } from 'express';
+import type {
     AsyncHandlerWrapper,
     ControllerDataType,
     HandlerFunction,

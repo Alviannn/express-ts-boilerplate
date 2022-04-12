@@ -9,10 +9,7 @@
 
 /* eslint-disable no-unused-vars */
 
-import {
-    Request, Response,
-    NextFunction
-} from 'express';
+import type { Request, Response, NextFunction } from 'express';
 
 declare type RequestMethods = 'GET' | 'POST' | 'DELETE' | 'PUT' | 'PATCH';
 

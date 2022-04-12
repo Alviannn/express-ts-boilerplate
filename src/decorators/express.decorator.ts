@@ -7,7 +7,7 @@
  ***                                                                     ***
  ***************************************************************************/
 
-import {
+import type {
     HandlerFunction, RequestMethods,
     RouterMap, RouterOptions
 } from '../typings/router';

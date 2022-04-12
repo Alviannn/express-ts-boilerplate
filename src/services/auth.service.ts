@@ -1,14 +1,15 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import config from '../configs/config';
-import { UserPayload, TokenType } from '../typings/auth';
 
-import { Request } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import { RefreshToken } from '../database/entities/refresh-token.entity';
 import { User } from '../database/entities/user.entity';
 import { ResponseError } from '../utils/api.util';
-import { LoginType, RegisterType } from '../validations/user.validation';
+
+import type { UserPayload, TokenType } from '../typings/auth';
+import type { Request } from 'express';
+import type { LoginType, RegisterType } from '../validations/user.validation';
 
 class AuthService {
 
