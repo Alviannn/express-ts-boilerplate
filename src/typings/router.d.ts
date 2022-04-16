@@ -11,27 +11,27 @@
 
 import type { Request, Response, NextFunction } from 'express';
 
-declare type RequestMethods = 'GET' | 'POST' | 'DELETE' | 'PUT' | 'PATCH';
+export type RequestMethods = 'GET' | 'POST' | 'DELETE' | 'PUT' | 'PATCH';
 
 /**
  * The best practice is not to use {@link Function} as your type.
  * But I have to, somehow, make a type that accepts it for the request handlers
  * and router method functions.
  */
-declare type HandlerFunction =
+export type HandlerFunction =
     (req: Request, res: Response, next: NextFunction)
         => unknown | Promise<unknown>;
 
 /**
  * @see {@link import('../routes').handlerWrapAsync}
  */
-declare type AsyncHandlerWrapper =
+export type AsyncHandlerWrapper =
     (req: Request, res: Response, next: NextFunction) => Promise<unknown>;
 
 /**
  * @see {@link HandlerFunction}
  */
-declare type RouterFunction =
+export type RouterFunction =
     (path: string, ...handlers: AsyncHandlerWrapper[]) => void;
 
 // ---------------------------------------------------- //
@@ -45,14 +45,14 @@ declare type RouterFunction =
  * to accept string (like keys in object)
  * and run the function based on {@link RequestMethods}.
  */
-declare type RouterHandlerType = Record<string, RouterFunction>
+export type RouterHandlerType = Record<string, RouterFunction>
 
 // ---------------------------------------------------- //
 
 /**
  * Stores the information from `Route` decorator.
  */
-declare interface RouteDataType {
+export interface RouteDataType {
     path: string;
     middlewares: HandlerFunction[];
     /**
@@ -65,7 +65,7 @@ declare interface RouteDataType {
 /**
  * Stores the information from `Controller` decorator.
  */
-declare interface ControllerDataType {
+export interface ControllerDataType {
     path: string;
     method: RequestMethods;
     /**
@@ -80,12 +80,12 @@ declare interface ControllerDataType {
 
 // ---------------------------------------------------- //
 
-declare interface RouterMap {
+export interface RouterMap {
     routes: Record<string, RouteDataType>;
     controllers: Record<string, ControllerDataType[]>;
 }
 
-declare interface RouterOptions {
+export interface RouterOptions {
     /**
      * The API major version, changing this for example to `2`
      * means that the API endpoint have a new big/major changes.
