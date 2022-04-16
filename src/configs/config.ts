@@ -9,7 +9,8 @@ const corsOption: CorsOptions = {
     origin: '*',
     /** Some legacy browsers (IE11, various SmartTVs) choke on 204 */
     optionsSuccessStatus: 200,
-    preflightContinue: true
+    preflightContinue: true,
+    credentials: true
 };
 
 const config = {
