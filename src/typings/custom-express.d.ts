@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-import type { UserPayload } from './auth';
 import type authenticate from '../middlewares/authenticate.middleware';
+import type { UserPayload } from './auth';
 
-declare module 'express-serve-static-core' {
+declare module 'express' {
 
     // extends the `Request` interface from express to have custom properties.
-    interface Request {
+    export interface Request {
 
         /**
          * User's authentication payload
