@@ -32,7 +32,7 @@ const config = {
         password: env.DB_PASSWORD!
     },
     cors: corsOption,
-    development: (env.NODE_ENV === 'development')
+    isDev: (env.NODE_ENV === 'development')
 };
 
 export default config;

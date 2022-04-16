@@ -18,7 +18,7 @@ const customPrintFormat = () => format.printf(
 );
 
 const logger = createLogger({
-    level: (config.development ? 'debug' : 'info'),
+    level: (config.isDev ? 'debug' : 'info'),
     format: customTimestampFormat(),
     transports: [
         new transports.DailyRotateFile({

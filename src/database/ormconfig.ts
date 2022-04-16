@@ -18,10 +18,10 @@ type ORMPathType = 'entities' | 'migrations' | 'subscribers';
  * * It accepts from the `dist` folder and searches for `.js` files
  */
 function pathToLoadORM(type: ORMPathType) {
-    const startDir = (config.development ? 'src' : 'dist');
+    const startDir = (config.isDev ? 'src' : 'dist');
 
     let middleExt: string;
-    const lastExt = (config.development ? 'ts' : 'js');
+    const lastExt = (config.isDev ? 'ts' : 'js');
 
     switch (type) {
         case 'entities':
@@ -47,7 +47,7 @@ export const appDataSource = new DataSource({
     database: config.db.database,
     // This'll automatically modify the tables as soon as the server starts
     // therefore, it's very bad for production
-    synchronize: config.development,
+    synchronize: config.isDev,
     entities: [pathToLoadORM('entities')],
     migrations: [pathToLoadORM('migrations')],
     subscribers: [pathToLoadORM('subscribers')]
