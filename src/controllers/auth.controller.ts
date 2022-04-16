@@ -37,8 +37,8 @@ export class AuthRoute {
 
     @Controller('POST', '/refresh', authenticate('REFRESH'))
     async refresh(req: Request, res: Response) {
-        const payload = await authService.getPayloadFromHeader(req, 'REFRESH');
-        const accessToken = authService.generateToken(payload!, 'ACCESS');
+        const { userPayload } = req;
+        const accessToken = authService.generateToken(userPayload!, 'ACCESS');
 
         return sendResponse(res, {
             message: 'Successfully refreshed new token',
