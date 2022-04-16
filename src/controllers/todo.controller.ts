@@ -1,4 +1,5 @@
-import { validate } from '../middlewares/validate.middleware';
+import validate from '../middlewares/validate.middleware';
+
 import { Request, Response } from 'express';
 import { Controller, Route } from '../decorators/express.decorator';
 import { Todo } from '../database/entities/todo.entity';

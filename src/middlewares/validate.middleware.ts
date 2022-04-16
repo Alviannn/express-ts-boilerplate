@@ -4,7 +4,7 @@ import { ResponseError } from '../utils/api.util';
 import type { NextFunction, Request, Response } from 'express';
 import type { ObjectSchema } from 'joi';
 
-export type ValidationType = 'BODY' | 'PARAMS' | 'QUERY';
+type ValidationType = 'BODY' | 'PARAMS' | 'QUERY';
 
 /**
  * Validates a request from client
@@ -15,7 +15,7 @@ export type ValidationType = 'BODY' | 'PARAMS' | 'QUERY';
  *             it defaults the `BODY` since we're mostly going to
  *             check the request body.
  */
-export function validate(schema: ObjectSchema, type: ValidationType = 'BODY') {
+function validate(schema: ObjectSchema, type: ValidationType = 'BODY') {
     return async (req: Request, _: Response, next: NextFunction) => {
 
         let targetToValidate;
@@ -51,3 +51,6 @@ export function validate(schema: ObjectSchema, type: ValidationType = 'BODY') {
         return next();
     };
 }
+
+export type { ValidationType };
+export default validate;
