@@ -18,6 +18,7 @@ function authenticate(
             throw Errors.NO_SESSION;
         }
 
+        req.userPayload = payload;
         return next();
     };
 }
