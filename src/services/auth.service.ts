@@ -68,7 +68,7 @@ class AuthService {
 
         let tokenSecret: string;
         const signOption: jwt.SignOptions = { notBefore: config.jwt.notBefore };
-        const payload: UserPayload = { id: user.id, email: user.email };
+        const payload: UserPayload = { id: user.id };
 
         if (tokenType === 'ACCESS') {
             tokenSecret = config.jwt.accessSecret;
