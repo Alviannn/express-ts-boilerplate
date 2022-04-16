@@ -5,10 +5,10 @@
 
 import logger from '../src/utils/logger.util';
 
-import { appDataSource } from '../src/ormconfig';
-import { hashPassword } from '../src/utils/auth.util';
-import { User } from '../src/entities/user.entity';
-import { Todo } from '../src/entities/todo.entity';
+import { appDataSource } from '../src/database/ormconfig';
+import { authService } from '../src/services/auth.service';
+import { User } from '../src/database/entities/user.entity';
+import { Todo } from '../src/database/entities/todo.entity';
 import { DateTime } from 'luxon';
 
 // -------------------------------------------------------------------- //
@@ -21,13 +21,13 @@ async function createData() {
             fullName: 'John Doe',
             email: 'john_doe@example.com',
             phone: DEFAULT_PHONE,
-            password: await hashPassword('JohnDoe123?')
+            password: await authService.hashPassword('JohnDoe123?')
         }),
         User.create({
             fullName: 'Alvian',
             email: 'alvian@example.com',
             phone: DEFAULT_PHONE,
-            password: await hashPassword('Alvian123?')
+            password: await authService.hashPassword('Alvian123?')
         })
     ];
 
