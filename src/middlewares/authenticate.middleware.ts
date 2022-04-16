@@ -12,8 +12,8 @@ import type { TokenType } from '../typings/auth';
 function authenticate(
     tokenType: TokenType = 'ACCESS') {
 
-    return (req: Request, _: Response, next: NextFunction) => {
-        const payload = authService.getPayloadFromHeader(req, tokenType);
+    return async (req: Request, _: Response, next: NextFunction) => {
+        const payload = await authService.getPayloadFromHeader(req, tokenType);
         if (!payload) {
             throw Errors.NO_SESSION;
         }

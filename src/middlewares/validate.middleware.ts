@@ -16,7 +16,7 @@ export type ValidationType = 'BODY' | 'PARAMS' | 'QUERY';
  *             check the request body.
  */
 export function validate(schema: ObjectSchema, type: ValidationType = 'BODY') {
-    return (req: Request, _: Response, next: NextFunction) => {
+    return async (req: Request, _: Response, next: NextFunction) => {
 
         let targetToValidate;
         switch (type) {

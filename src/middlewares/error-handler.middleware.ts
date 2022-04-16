@@ -8,7 +8,7 @@ import {
 
 import type { Request, Response, NextFunction } from 'express';
 
-function errorHandling(
+async function errorHandling(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     err: Error, req: Request, res: Response, _: NextFunction) {
 
