@@ -38,7 +38,7 @@ export class User extends BaseEntity {
     })
     updatedAt?: DateTime;
 
-    filter() {
+    toJSON() {
         const cloned = { ...this } as Record<string, unknown>;
         delete cloned.password;
 

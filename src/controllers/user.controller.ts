@@ -12,13 +12,11 @@ export class UserRoute {
     @Controller('GET', '/profile', authenticate())
     async profile(req: Request, res: Response) {
         const payload = await authService.getPayloadFromHeader(req);
-        const filteredUser = await userService.get(payload!.id, true);
+        const user = await userService.get(payload!.id);
 
         return sendResponse(res, {
             message: 'Successfully found user data',
-            data: {
-                user: filteredUser
-            }
+            data: { user }
         });
     }
 
