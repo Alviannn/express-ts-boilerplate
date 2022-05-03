@@ -6,16 +6,18 @@ import { DateTime } from 'luxon';
 
 const DATETIME_FORMAT = 'yyyy-MM-dd - HH:mm:ss ZZ';
 
+function customPrintFormat() {
+    return format.printf(
+        ({ level, message, timestamp }) => `[${timestamp}] ${level}: ${message}`
+    );
+}
+
 const customTimestampFormat = format((info) => {
     const currDate = DateTime.now();
     info.timestamp = currDate.toFormat(DATETIME_FORMAT);
 
     return info;
 });
-
-const customPrintFormat = () => format.printf(
-    ({ level, message, timestamp }) => `[${timestamp}] ${level}: ${message}`
-);
 
 const logger = createLogger({
     level: (config.isDev ? 'debug' : 'info'),
@@ -27,10 +29,7 @@ const logger = createLogger({
             format: customPrintFormat()
         }),
         new transports.Console({
-            format: format.combine(
-                format.colorize(),
-                customPrintFormat()
-            )
+            format: format.combine(format.colorize(), customPrintFormat())
         })
     ]
 });
