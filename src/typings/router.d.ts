@@ -91,11 +91,12 @@ export interface RouterOptions {
      * means that the API endpoint have a new big/major changes.
      * The major version is the same from {@link https://semver.org/}.
      *
-     * Here's an example, on the v1 endpoint, let's say we don't know
-     * it should be plural but then later change it to a plural version.
-     * Since many people uses your API, you can't delete the old endpoint.
-     * You need to make a new API in v2 and suggests your users to use it.
-     * Once everyone has moved to the v2 or at least ready, you can remove v1.
+     * Here's an example, on the v1 endpoint, let's say you we're using
+     * the wrong route name and we want to fix it. Since many people uses
+     * your API, you can't just delete or change the old endpoint.
+     * Therefore, you need to make a new API in v2 and suggests your users
+     * to use it slowly by giving more time. Once everyone has moved to
+     * v2 or at least ready, you can remove finally remove v1 route.
      *
      * From:
      * ```txt
@@ -113,14 +114,14 @@ export interface RouterOptions {
     /**
      * The route should accept a request from a "path".
      *
-     * Let's say the value is `example`, then the endpoint starts with:
-     * `/v1/example`
+     * Let's say the path is `example`,
+     * then the endpoint will be: `/v1/example`
      */
     path: string;
     /**
      * The middlewares for this route.
      *
-     * This middlewares will be applied to all existing controllers
+     * It will be applied to all existing controllers
      * within this route.
      *
      * @default []

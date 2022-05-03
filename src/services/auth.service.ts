@@ -145,7 +145,7 @@ class AuthService {
         try {
             return jwt.verify(token, secret) as UserPayload;
         } catch (err) {
-            // token is invalid, so returning `undefined`
+            // token is invalid, so returning `undefined` instead
         }
     }
 

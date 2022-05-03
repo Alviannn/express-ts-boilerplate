@@ -7,6 +7,9 @@ import type { TokenType } from '../typings/auth';
 /**
  * Handles user authentication
  *
+ * If this middleware is used on a route, it'll provide the ability
+ * to use `req.userPayload`.
+ *
  * @param tokenType the kind of to token should be check
  */
 function authenticate(
