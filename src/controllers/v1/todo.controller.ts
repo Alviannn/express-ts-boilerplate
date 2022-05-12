@@ -1,7 +1,7 @@
 import validate from '../../middlewares/validate.middleware';
 
 import { Request, Response } from 'express';
-import { Controller, Route } from '../../decorators/express.decorator';
+import { Controller, ReqHandler } from '../../decorators/express.decorator';
 import { Todo } from '../../database/entities/todo.entity';
 import { sendResponse } from '../../utils/api.util';
 import { StatusCodes } from 'http-status-codes';
@@ -18,10 +18,10 @@ import type {
     TodoIdType
 } from '../../validations/todo.validation';
 
-@Route({ path: 'todos' })
+@Controller({ path: 'todos' })
 export class TodosRoute {
 
-    @Controller('POST', '/add', validate(newTodoSchema))
+    @ReqHandler('POST', '/add', validate(newTodoSchema))
     async add(req: Request, res: Response) {
         const { content } = req.body as NewTodoType;
         const todoId = await todoService.add(content);
@@ -33,7 +33,7 @@ export class TodosRoute {
         });
     }
 
-    @Controller(
+    @ReqHandler(
         'PATCH', '/update/:todoId',
         validate(updateTodoSchema),
         validate(todoIdSchema, 'PARAMS')
@@ -47,7 +47,7 @@ export class TodosRoute {
         return sendResponse(res, { message: 'Successfully updated todo' });
     }
 
-    @Controller('DELETE', '/delete/:todoId', validate(todoIdSchema, 'PARAMS'))
+    @ReqHandler('DELETE', '/delete/:todoId', validate(todoIdSchema, 'PARAMS'))
     async delete(req: Request, res: Response) {
         const { todoId } = req.params as unknown as TodoIdType;
         await todoService.delete(todoId);
@@ -55,7 +55,7 @@ export class TodosRoute {
         return sendResponse(res, { message: 'Successfully deleted a todo' });
     }
 
-    @Controller('GET', '/:todoId', validate(todoIdSchema, 'PARAMS'))
+    @ReqHandler('GET', '/:todoId', validate(todoIdSchema, 'PARAMS'))
     async getById(req: Request, res: Response) {
         const { todoId } = req.params as unknown as TodoIdType;
         const todo = await todoService.get(todoId);
@@ -66,7 +66,7 @@ export class TodosRoute {
         });
     }
 
-    @Controller('GET', '/')
+    @ReqHandler('GET', '/')
     async getAll(_: Request, res: Response) {
         const todos = await Todo.find();
 

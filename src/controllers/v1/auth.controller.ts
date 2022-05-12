@@ -2,7 +2,7 @@ import authenticate from '../../middlewares/authenticate.middleware';
 import validate from '../../middlewares/validate.middleware';
 
 import { Request, Response } from 'express';
-import { Controller, Route } from '../../decorators/express.decorator';
+import { Controller, ReqHandler } from '../../decorators/express.decorator';
 import { sendResponse } from '../../utils/api.util';
 import { StatusCodes } from 'http-status-codes';
 import { authService } from '../../services/auth.service';
@@ -13,10 +13,10 @@ import type {
     RegisterType
 } from '../../validations/user.validation';
 
-@Route({ path: 'auth' })
+@Controller({ path: 'auth' })
 export class AuthRoute {
 
-    @Controller('POST', '/login', validate(loginSchema))
+    @ReqHandler('POST', '/login', validate(loginSchema))
     async login(req: Request, res: Response) {
         const body = req.body as LoginType;
         const tokens = await authService.login(body);
@@ -27,7 +27,7 @@ export class AuthRoute {
         });
     }
 
-    @Controller('POST', '/register', validate(registerSchema))
+    @ReqHandler('POST', '/register', validate(registerSchema))
     async register(req: Request, res: Response) {
         const body = req.body as RegisterType;
         await authService.register(body);
@@ -38,7 +38,7 @@ export class AuthRoute {
         });
     }
 
-    @Controller('POST', '/refresh', authenticate('REFRESH'))
+    @ReqHandler('POST', '/refresh', authenticate('REFRESH'))
     async refresh(req: Request, res: Response) {
         const { userPayload } = req;
         const accessToken = authService.generateToken(userPayload!, 'ACCESS');
@@ -49,7 +49,7 @@ export class AuthRoute {
         });
     }
 
-    @Controller('DELETE', '/logout', authenticate('REFRESH'))
+    @ReqHandler('DELETE', '/logout', authenticate('REFRESH'))
     async logout(req: Request, res: Response) {
         const token = authService.getTokenFromHeader(req)!;
         await authService.logout(token);
