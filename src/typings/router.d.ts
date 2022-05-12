@@ -7,8 +7,6 @@
  ***                                                                     ***
  ***************************************************************************/
 
-/* eslint-disable no-unused-vars */
-
 import type {
     Request,
     Response,
