@@ -3,7 +3,7 @@
  ***************************************************************************
  ***                                                                     ***
  *  This file shouldn't be modified unless you know what you're doing.     *
- *  It contains the logic for `Route` and `Controller` decorator to work.  *
+ *  It contains the logic for controllers and handlers decorator to work.  *
  ***                                                                     ***
  ***************************************************************************/
 

@@ -3,52 +3,54 @@
  ***************************************************************************
  ***                                                                     ***
  *  This file shouldn't be modified unless you know what you're doing.     *
- *  It contains the logic for `Route` and `Controller` decorator to work.  *
+ *  It contains the logic for controllers and handlers decorator to work.  *
  ***                                                                     ***
  ***************************************************************************/
 
 import type {
     HandlerFunction, RequestMethods,
-    RouterMap, RouterOptions
+    RoutingMap, ControllerOptions
 } from '../typings/router';
 
 /**
- * Stores all {@link Route}s and {@link Controller}s
+ * Stores informations about all routing decorators.
  *
- * Later on, this will be used for registering as routers.
+ * Later on, this will be used to register to express routers.
  */
-export const routerMap: RouterMap = {
-    routes: {},
-    controllers: {}
+export const routingMap: RoutingMap = {
+    controllers: {},
+    handlers: {}
 };
 
 /**
- * A route decorator that is used to mark a `class` as the route
- * for the {@link Controller}s within it.
+ * A controller decorator that is used to mark a `class` as
+ * the whole controller which contains all {@link ReqHandler}s.
  *
- * To simplify our work in the backend, I made this to remove steps
- * to adding controllers and routes to the global router. With this,
- * all you need to think is the `controllers` directory and it's content.
+ * To simplify our work in the backend, I made this to remove the steps
+ * to mapping controllers and registering routes to express router. With this,
+ * all you need to think is the files within `controllers` and it's content.
  *
- * Once registered, let's say our path is `example`, therefore:
+ * Once registered, let's say our path is `example`, then it'll become:
  * `http://localhost:3000/v1/example`
  *
- * @param options The route configuration
+ * @param options The controller configuration
  */
-export function Route(options: RouterOptions): ClassDecorator {
+export function Controller(options: ControllerOptions): ClassDecorator {
     return (target) => {
         const { path, version, middlewares } = options;
 
-        // route path shouldn't have '/' as the starting or ending
-        // because express.js can't interpret it and will not work.
+        // request path cannot start or end with '/'
+        // because express.js can't interpret it.
         if (path.startsWith('/') || path.endsWith('/')) {
-            throw Error("Router path cannot have '/' as a prefix or suffix!");
+            throw Error("Controller path cannot start or end with'/'!");
         }
 
-        // instantiate the object, so we can use the 'controllers' later on
+        // instantiate the object, so we can use the
+        // methods or request handlers within the class.
         const targetObj = new target.prototype.constructor();
+        const { controllers } = routingMap;
 
-        routerMap.routes[target.name] = {
+        controllers[target.name] = {
             path: `/v${version ?? 1}/${path}`,
             middlewares: middlewares ?? [],
             targetObj
@@ -57,19 +59,21 @@ export function Route(options: RouterOptions): ClassDecorator {
 }
 
 /**
- * A controller decorator that is used to mark a method (function in a class)
- * as a controller for the router, meaning this is connected to {@link Route}.
+ * A request handler decorator that is used to mark a method as a handler
+ * for a controller.
  *
- * Creating separate directory for `routes` and `controllers` is a good thing,
- * but I feel like we can decrease the steps to register a route.
+ * In my opinion, mapping controllers (request handlers) to it's respective
+ * routes isn't a bad thing. But I feel like we can remove those steps and
+ * focus only to the controllers and it's handlers.
  *
- * @param method Request method it's accepting.
- * @param path Controller path will be combined with {@link Route}.
- *             Let's say the route is `products` and this path is `/add`,
- *             therefore: `http://localhost:3000/v1/products/add`.
- * @param middlewares Middlewares for this specific controller.
+ * @param method The request method it's accepting.
+ * @param path The request path for the handler, it will be
+ *             concatenated with the path from {@link Controller}.
+ *             Let's say the controller `products` and the handler is `/add`,
+ *             then it'll become: `http://localhost:3000/v1/products/add`.
+ * @param middlewares Middlewares for this specific handler.
  */
-export function Controller(
+export function ReqHandler(
     method: RequestMethods,
     path: string,
     ...middlewares: HandlerFunction[]): MethodDecorator {
@@ -79,34 +83,37 @@ export function Controller(
             return;
         }
 
-        // Only '/' should be allowed for GET ALL or just GET kind of thing.
+        // If it's only '/', then it should be allowed.
         // ex: `/v1/todos/` is usually interpreted as 'get all todo'
         //
         // What about when it's not just 1 character?
-        // A controller route should at least have '/' as it's prefix,
-        // because it can't be empty anyways.
+        // A request path for handler should at least have '/' as it's prefix
+        // to help on the concatination.
         //
-        // As a suffix, this is can cause inconsistencies.
+        // As a suffix, this can cause inconsistencies, so it's not allowed.
         // ex: `/add`, then `/:id/`, then `/update`.
         if (path.length > 1) {
             if (!path.startsWith('/')) {
-                throw Error("Controller must have '/' as prefix!");
+                throw Error("Request handler must start with '/'!");
             } else if (path.endsWith('/')) {
                 throw Error(
                     'Due to inconsistencies, ' +
-                    "controller cannot have '/' as suffix!");
+                    "request handler cannot end with '/'!");
             }
         }
 
         const funcName = key as string;
-        const routerClassName = target.constructor.name;
+        const controllerClassName = target.constructor.name;
+        const { handlers } = routingMap;
 
-        if (!(routerClassName in routerMap.controllers)) {
-            routerMap.controllers[routerClassName] = [] as never;
+        if (!(controllerClassName in handlers)) {
+            handlers[controllerClassName] = [] as never;
         }
 
-        routerMap.controllers[routerClassName].push({
-            path, method,
+        const handlerStore = handlers[controllerClassName];
+        handlerStore.push({
+            path,
+            method,
             handlerName: funcName,
             middlewares
         });
