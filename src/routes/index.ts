@@ -11,27 +11,27 @@ import fs from 'fs';
 import path from 'node:path';
 
 import { Router } from 'express';
-import { routerMap } from '../decorators/express.decorator';
+import { routingMap } from '../decorators/express.decorator';
 import { ANSI } from '../utils/ansi.util';
 
 import type { Request, Response, NextFunction } from 'express';
 import type {
     AsyncHandlerWrapper,
     ControllerDataType,
+    ReqHandlerDataType,
     HandlerFunction,
-    RouteDataType,
     RouterHandlerType
 } from '../typings/router';
 
 /**
- * Wraps the {@link HandlerFunction} inside a {@link Promise}.
+ * Wraps a request handler or middleware handler inside a {@link Promise}.
  *
- * The error handler in js doesn't support asynchronous flow.
- * So, to somehow make the error handling work, wrapping it with {@link Promise}
- * might make up for it.
+ * The error handler in express doesn't support asynchronous flow.
+ * So, to somehow make the error handling work, wrapping it with
+ * {@link Promise} might make up for it.
  *
- * Why? Because it has {@link Promise.catch} which obviously means
- * we can use it to "catch" the error then pass it to `next`.
+ * Why? Because there's {@link Promise.catch} which means we can use it
+ * to "catch" the error, and then pass it to `next` function.
  */
 function handlerWrapAsync(handler: HandlerFunction): AsyncHandlerWrapper {
     return async (req: Request, res: Response, next: NextFunction) => {
@@ -43,61 +43,59 @@ function handlerWrapAsync(handler: HandlerFunction): AsyncHandlerWrapper {
     };
 }
 
-function registerController(
-    router: RouterHandlerType,
-    routerData: RouteDataType,
-    controllerData: ControllerDataType) {
+function mapRequestHandlers(
+    router: Router,
+    controller: ControllerDataType,
+    reqHandler: ReqHandlerDataType) {
 
     const {
-        path: routePath,
+        path: handlerPath,
         middlewares,
         handlerName,
         method
-    } = controllerData;
+    } = reqHandler;
 
-    const mainHandler = routerData.targetObj[handlerName] as HandlerFunction;
-    const handlerList = [...middlewares, mainHandler]
+    const handlerFunc = controller.targetObj[handlerName] as HandlerFunction;
+    const handlerList = [...middlewares, handlerFunc]
         .map((handler) => handlerWrapAsync(handler));
 
-    const methodName = method.toLowerCase();
-    router[methodName](routePath, ...handlerList);
+    // allow the express router to accept string as its methods
+    // based on HTTP request methods.
+    const routerObject = router as unknown as RouterHandlerType;
+    const routerMethodName = method.toLowerCase();
 
-    const msg = `{color}${method} \t${routerData.path}${routePath}{reset}`
+    routerObject[routerMethodName](handlerPath, ...handlerList);
+
+    const msg = `{color}${method} \t${controller.path}${handlerPath}{reset}`
         .replace('{color}', ANSI.GREEN)
         .replace('{reset}', ANSI.RESET);
 
     console.log(msg);
 }
 
-function registerRouters(globalRouter: Router) {
-    const { routes, controllers } = routerMap;
+function mapRoutes(globalRouter: Router) {
+    const { controllers, handlers } = routingMap;
 
-    for (const [className, parent] of Object.entries(routes)) {
+    for (const [className, controller] of Object.entries(controllers)) {
         const currentRouter = Router();
-        const controllerList = controllers[className];
+        const reqHandlerList = handlers[className];
 
-        if (parent.middlewares.length) {
-            currentRouter.use(...parent.middlewares);
+        if (controller.middlewares.length) {
+            currentRouter.use(...controller.middlewares);
         }
 
-        // To make the 'registering-route' output look pretty,
-        // we're just going to add a line to the output
-        // before it shows the actual output.
-        if (controllerList) {
-            console.log();
+        // skip empty controllers
+        if (!reqHandlerList) {
+            continue;
         }
 
-        for (const controller of controllerList) {
-            // The `registerController` function only accepts the router
-            // with the type of `RouterHandlerType`.
-            registerController(
-                currentRouter as unknown as RouterHandlerType,
-                parent,
-                controller
-            );
+        console.log();
+
+        for (const reqHandler of reqHandlerList) {
+            mapRequestHandlers(currentRouter, controller, reqHandler);
         }
 
-        globalRouter.use(parent.path, currentRouter);
+        globalRouter.use(controller.path, currentRouter);
     }
 }
 
@@ -120,9 +118,6 @@ async function importRoutes(filePath: string) {
 
         await Promise.all(promises);
     } else if (filePath.includes('.controller.')) {
-        // Importing based on the complete path won't work,
-        // using the `resolve` function will make it like
-        // how you used to import a local module.
         await import(path.resolve(filePath));
     }
 }
@@ -138,7 +133,7 @@ export async function createGlobalRouter(): Promise<Router> {
     await importRoutes(controllersDir);
 
     const router = Router();
-    registerRouters(router);
+    mapRoutes(router);
 
     return router;
 }
