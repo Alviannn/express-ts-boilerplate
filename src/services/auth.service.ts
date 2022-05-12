@@ -63,10 +63,9 @@ class AuthService {
         return bcrypt.hash(password, config.hashRounds);
     }
 
-    async generateToken(
-        user: User | UserPayload, tokenType: TokenType) {
-
+    async generateToken(user: User | UserPayload, tokenType: TokenType) {
         let tokenSecret: string;
+
         const signOption: jwt.SignOptions = { notBefore: config.jwt.notBefore };
         const payload: UserPayload = { id: user.id };
 
@@ -88,11 +87,13 @@ class AuthService {
     }
 
     /**
-     * Extracts the user's JWT (in the header).
-     * This is used to make the `logout` controller cleaner.
+     * Extracts the from the JWT within the Authorization header.
      *
-     * It won't be an `undefined` if the `authenticate` middleware
-     * is already used for the controller.
+     * With this we can get the raw token without manual extraction,
+     * although for getting the user payload, you might need
+     * {@link getPayloadFromHeader} function.
+     *
+     * This function **doesn't verify the token**.
      */
     getTokenFromHeader(req: Request) {
         const rawToken = req.header('authorization');
@@ -107,16 +108,12 @@ class AuthService {
     }
 
     /**
-     * Extracts the user's payload from the JWT (in the header).
+     * Extracts the user data payload from the JWT
+     * within the Authorization header.
      *
-     * With this, we don't need to validate the token manually
-     * (even after using `authenticate` middleware) and instead can focus
-     * with the payload content.
+     * Before it extracts the payload, it'll verify the token first.
      *
-     * It won't be an `undefined` if the `authenticate` middleware
-     * is already used for the controller.
-     *
-     * @throws If the {@link tokenType} incorrect {@link TokenType}
+     * @see `authenticate` middleware
      */
     async getPayloadFromHeader(
         req: Request, tokenType: TokenType = 'ACCESS') {
