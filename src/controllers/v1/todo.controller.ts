@@ -1,22 +1,22 @@
-import validate from '../middlewares/validate.middleware';
+import validate from '../../middlewares/validate.middleware';
 
 import { Request, Response } from 'express';
-import { Controller, Route } from '../decorators/express.decorator';
-import { Todo } from '../database/entities/todo.entity';
-import { sendResponse } from '../utils/api.util';
+import { Controller, Route } from '../../decorators/express.decorator';
+import { Todo } from '../../database/entities/todo.entity';
+import { sendResponse } from '../../utils/api.util';
 import { StatusCodes } from 'http-status-codes';
-import { todoService } from '../services/todo.service';
+import { todoService } from '../../services/todo.service';
 import {
     newTodoSchema,
     updateTodoSchema,
     todoIdSchema
-} from '../validations/todo.validation';
+} from '../../validations/todo.validation';
 
 import type {
     NewTodoType,
     UpdateTodoType,
     TodoIdType
-} from '../validations/todo.validation';
+} from '../../validations/todo.validation';
 
 @Route({ path: 'todos' })
 export class TodosRoute {

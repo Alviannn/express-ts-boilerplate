@@ -1,14 +1,17 @@
-import authenticate from '../middlewares/authenticate.middleware';
-import validate from '../middlewares/validate.middleware';
+import authenticate from '../../middlewares/authenticate.middleware';
+import validate from '../../middlewares/validate.middleware';
 
 import { Request, Response } from 'express';
-import { Controller, Route } from '../decorators/express.decorator';
-import { sendResponse } from '../utils/api.util';
+import { Controller, Route } from '../../decorators/express.decorator';
+import { sendResponse } from '../../utils/api.util';
 import { StatusCodes } from 'http-status-codes';
-import { authService } from '../services/auth.service';
-import { loginSchema, registerSchema } from '../validations/user.validation';
+import { authService } from '../../services/auth.service';
+import { loginSchema, registerSchema } from '../../validations/user.validation';
 
-import type { LoginType, RegisterType } from '../validations/user.validation';
+import type {
+    LoginType,
+    RegisterType
+} from '../../validations/user.validation';
 
 @Route({ path: 'auth' })
 export class AuthRoute {
