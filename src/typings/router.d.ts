@@ -9,7 +9,14 @@
 
 /* eslint-disable no-unused-vars */
 
-import type { Request, Response, NextFunction } from 'express';
+import type {
+    Request,
+    Response,
+    NextFunction,
+    // ignore to allow linking on documentation
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    Router
+} from 'express';
 
 export type RequestMethods = 'GET' | 'POST' | 'DELETE' | 'PUT' | 'PATCH';
 
@@ -28,22 +35,24 @@ export type HandlerFunction =
 export type AsyncHandlerWrapper =
     (req: Request, res: Response, next: NextFunction) => Promise<unknown>;
 
+// ---------------------------------------------------- //
+
 /**
- * @see {@link HandlerFunction}
+ * Replicates the function to register a router
+ * such as from {@link Router.get}.
+ *
+ * @see {@link RouterHandlerType}
  */
 export type RouterFunction =
     (path: string, ...handlers: AsyncHandlerWrapper[]) => void;
-
-// ---------------------------------------------------- //
 
 /**
  * In a {@link Router}, there are function to register a request handler
  * such as {@link Router.get} and {@link Router.post}.
  *
  * But it's hard to execute it manually with (for example) `router.get`
- * and {@link RequestMethods}. Therefore, I'm forcing the module
- * to accept string (like keys in object)
- * and run the function based on {@link RequestMethods}.
+ * and {@link RequestMethods}. Therefore, I'm forcing the module to accept
+ * string run the function based on {@link RequestMethods}.
  */
 export type RouterHandlerType = Record<string, RouterFunction>
 
@@ -94,6 +103,7 @@ export interface RouterOptions {
      * Here's an example, on the v1 endpoint, let's say you we're using
      * the wrong route name and we want to fix it. Since many people uses
      * your API, you can't just delete or change the old endpoint.
+     *
      * Therefore, you need to make a new API in v2 and suggests your users
      * to use it slowly by giving more time. Once everyone has moved to
      * v2 or at least ready, you can remove finally remove v1 route.
