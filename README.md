@@ -41,6 +41,7 @@ To see the dependencies used in this boilerplate, [go here](#dependencies).
  |--src\                  # Source folder
     |--configs\           # Application configs
     |--controllers\       # Routes and controllers
+        |--v1             # The first major version of the controllers
     |--database\          # Database related code
         |--entities\      # Database models/entities (represents table)
         |--ormconfig.ts   # TypeORM datasource configuration
