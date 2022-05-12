@@ -45,21 +45,21 @@ export type RouterFunction =
     (path: string, ...handlers: AsyncHandlerWrapper[]) => void;
 
 /**
- * In a {@link Router}, there are function to register a request handler
+ * Inside {@link Router}, there are functions to register a request handler
  * such as {@link Router.get} and {@link Router.post}.
  *
- * But it's hard to execute it manually with (for example) `router.get`
- * and {@link RequestMethods}. Therefore, I'm forcing the module to accept
- * string run the function based on {@link RequestMethods}.
+ * But it's tricky to execute the function with {@link RequestMethods}.
+ * Therefore, I'm forcing the module to accept a string to run the function
+ * based on {@link RequestMethods}.
  */
 export type RouterHandlerType = Record<string, RouterFunction>
 
 // ---------------------------------------------------- //
 
 /**
- * Stores the information from `Route` decorator.
+ * Stores the information from `Controller` decorator.
  */
-export interface RouteDataType {
+export interface ControllerDataType {
     path: string;
     middlewares: HandlerFunction[];
     /**
@@ -70,14 +70,14 @@ export interface RouteDataType {
 }
 
 /**
- * Stores the information from `Controller` decorator.
+ * Stores the information from `ReqHandler` decorator.
  */
-export interface ControllerDataType {
+export interface ReqHandlerDataType {
     path: string;
     method: RequestMethods;
     /**
-     * The method name for the `Controller` is stored
-     * so grab the method from the class with `Route` decorator.
+     * The method name for the specific `ReqHandler`,
+     * which is used for executing the request handler upon being called.
      *
      * This is connected with the {@link RouteDataType.targetObj}
      */
@@ -85,26 +85,27 @@ export interface ControllerDataType {
     middlewares: HandlerFunction[];
 }
 
-// ---------------------------------------------------- //
-
-export interface RouterMap {
-    routes: Record<string, RouteDataType>;
-    controllers: Record<string, ControllerDataType[]>;
+export interface RoutingMap {
+    controllers: Record<string, ControllerDataType>;
+    handlers: Record<string, ReqHandlerDataType[]>;
 }
 
-export interface RouterOptions {
+// ---------------------------------------------------- //
+
+export interface ControllerOptions {
     /**
      * The API major version, changing this for example to `2`
      * means that the API endpoint have a new big/major changes.
      * The major version is the same from {@link https://semver.org/}.
      *
-     * Here's an example, on the v1 endpoint, let's say you we're using
-     * the wrong route name and we want to fix it. Since many people uses
-     * your API, you can't just delete or change the old endpoint.
+     * Here's an example, on the v1 endpoint, let's say you have a popular API
+     * but you wrote a bad endpoint path and you want to fix it.
+     * Since many people uses your API, you can't just modify it.
      *
      * Therefore, you need to make a new API in v2 and suggests your users
      * to use it slowly by giving more time. Once everyone has moved to
-     * v2 or at least ready, you can remove finally remove v1 route.
+     * v2 or at least ready, you can then remove v1 route or maybe keep it,
+     * it's up to you.
      *
      * From:
      * ```txt
@@ -120,17 +121,14 @@ export interface RouterOptions {
      */
     version?: number;
     /**
-     * The route should accept a request from a "path".
+     * The request path that the controller accepts.
      *
-     * Let's say the path is `example`,
-     * then the endpoint will be: `/v1/example`
+     * Let's say the path value is `example`, then it will become: `/v1/example`
      */
     path: string;
     /**
      * The middlewares for this route.
-     *
-     * It will be applied to all existing controllers
-     * within this route.
+     * It will be applied to all handlers within this route.
      *
      * @default []
      */
