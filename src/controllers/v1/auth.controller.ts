@@ -51,6 +51,8 @@ export class AuthRoute {
         const token = authService.getTokenFromRequest(req, 'REFRESH')!;
         await authService.logout(token);
 
+        res.clearCookie('refreshToken');
+
         return sendResponse(res, {
             statusCode: StatusCodes.ACCEPTED,
             message: 'Successfully logged out'
