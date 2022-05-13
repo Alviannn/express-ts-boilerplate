@@ -1,6 +1,10 @@
+import ms from 'ms';
+import config from '../configs/config';
+
 import { StatusCodes } from 'http-status-codes';
 
 import type { Response } from 'express';
+import type { AuthTokens } from '../typings/auth';
 
 export interface APIResponse<T = unknown> {
     statusCode?: StatusCodes;
@@ -10,7 +14,7 @@ export interface APIResponse<T = unknown> {
 }
 
 /**
- * Sends response
+ * Sends a JSON response
  *
  * The usual way doesn't have any template to sending responses,
  * therefore you don't get help from the autocomplete.
@@ -27,6 +31,29 @@ export function sendResponse<T>(res: Response, params: APIResponse<T>) {
     };
 
     return res.status(code).json(response);
+}
+
+/**
+ * Sends authentication tokens (both access and refresh tokens) securely.
+ *
+ * Applying the best practice for secured JWT usage, this function
+ * will send the tokens separately from the `body` and `cookie`.
+ *
+ * The cookie is `httpOnly` which means it can't be accessed
+ * from the client's browser through JavaScript.
+ */
+export function sendAuthTokens(res: Response, tokens: AuthTokens) {
+    const { accessToken, refreshToken } = tokens;
+
+    res.cookie('refreshToken', refreshToken, {
+        httpOnly: true,
+        maxAge: ms(config.jwt.refreshExpire)
+    });
+
+    return sendResponse(res, {
+        message: 'Successfully logged in',
+        data: { accessToken }
+    });
 }
 
 /**
