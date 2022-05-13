@@ -3,10 +3,15 @@ import validate from '../../middlewares/validate.middleware';
 
 import { Request, Response } from 'express';
 import { Controller, ReqHandler } from '../../decorators/express.decorator';
-import { sendResponse, sendAuthTokens } from '../../utils/api.util';
 import { StatusCodes } from 'http-status-codes';
 import { authService } from '../../services/auth.service';
 import { loginSchema, registerSchema } from '../../validations/user.validation';
+
+import {
+    sendResponse,
+    sendAuthTokens,
+    REFRESH_TOKEN_COOKIE
+} from '../../utils/api.util';
 
 import type {
     LoginType,
@@ -51,7 +56,7 @@ export class AuthRoute {
         const token = authService.getTokenFromRequest(req, 'REFRESH')!;
         await authService.logout(token);
 
-        res.clearCookie('refreshToken');
+        res.clearCookie(REFRESH_TOKEN_COOKIE);
 
         return sendResponse(res, {
             statusCode: StatusCodes.ACCEPTED,

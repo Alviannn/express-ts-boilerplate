@@ -6,6 +6,8 @@ import { StatusCodes } from 'http-status-codes';
 import type { Response } from 'express';
 import type { AuthTokens } from '../typings/auth';
 
+export const REFRESH_TOKEN_COOKIE = 'refreshToken';
+
 export interface APIResponse<T = unknown> {
     statusCode?: StatusCodes;
     success?: boolean;
@@ -45,7 +47,7 @@ export function sendResponse<T>(res: Response, params: APIResponse<T>) {
 export function sendAuthTokens(res: Response, tokens: AuthTokens) {
     const { accessToken, refreshToken } = tokens;
 
-    res.cookie('refreshToken', refreshToken, {
+    res.cookie(REFRESH_TOKEN_COOKIE, refreshToken, {
         httpOnly: true,
         maxAge: ms(config.jwt.refreshExpire)
     });
