@@ -7,6 +7,7 @@ import { RefreshToken } from '../database/entities/refresh-token.entity';
 import { User } from '../database/entities/user.entity';
 import { ResponseError } from '../utils/api.util';
 
+import type { JwtPayload } from 'jsonwebtoken';
 import type { UserPayload, TokenType, AuthTokens } from '../typings/auth';
 import type { Request } from 'express';
 import type { LoginType, RegisterType } from '../validations/user.validation';
@@ -144,7 +145,8 @@ class AuthService {
         }
 
         try {
-            return jwt.verify(token, secret) as UserPayload;
+            const payload = jwt.verify(token, secret) as JwtPayload;
+            return { id: payload.id } as UserPayload;
         } catch (err) {
             // token is invalid, so returning `undefined` instead
         }
