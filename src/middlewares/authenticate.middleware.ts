@@ -16,7 +16,7 @@ function authenticate(
     tokenType: TokenType = 'ACCESS') {
 
     return async (req: Request, _: Response, next: NextFunction) => {
-        const payload = await authService.getPayloadFromHeader(req, tokenType);
+        const payload = await authService.getPayloadFromRequest(req, tokenType);
         if (!payload) {
             throw Errors.NO_SESSION;
         }
