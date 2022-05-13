@@ -137,8 +137,6 @@ class AuthService {
             case 'REFRESH':
                 secret = config.jwt.refreshSecret;
                 break;
-            default:
-                throw Error('Token type is not defined');
         }
 
         if (tokenType === 'REFRESH' && !RefreshToken.findOneBy({ token })) {
