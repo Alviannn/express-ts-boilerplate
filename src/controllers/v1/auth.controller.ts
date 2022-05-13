@@ -3,7 +3,7 @@ import validate from '../../middlewares/validate.middleware';
 
 import { Request, Response } from 'express';
 import { Controller, ReqHandler } from '../../decorators/express.decorator';
-import { sendResponse } from '../../utils/api.util';
+import { sendResponse, sendAuthTokens } from '../../utils/api.util';
 import { StatusCodes } from 'http-status-codes';
 import { authService } from '../../services/auth.service';
 import { loginSchema, registerSchema } from '../../validations/user.validation';
@@ -21,10 +21,7 @@ export class AuthRoute {
         const body = req.body as LoginType;
         const tokens = await authService.login(body);
 
-        return sendResponse(res, {
-            message: 'Successfully logged in as a user',
-            data: { ...tokens }
-        });
+        return sendAuthTokens(res, tokens);
     }
 
     @ReqHandler('POST', '/register', validate(registerSchema))
@@ -51,7 +48,7 @@ export class AuthRoute {
 
     @ReqHandler('DELETE', '/logout', authenticate('REFRESH'))
     async logout(req: Request, res: Response) {
-        const token = authService.getTokenFromHeader(req)!;
+        const token = authService.getTokenFromRequest(req, 'REFRESH')!;
         await authService.logout(token);
 
         return sendResponse(res, {
