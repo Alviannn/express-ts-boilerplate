@@ -80,13 +80,13 @@ function mapRoutes(globalRouter: Router) {
         const currentRouter = Router();
         const reqHandlerList = handlers[className];
 
-        if (controller.middlewares.length) {
-            currentRouter.use(...controller.middlewares);
-        }
-
         // skip empty controllers
         if (!reqHandlerList) {
             continue;
+        }
+
+        if (controller.middlewares.length) {
+            currentRouter.use(...controller.middlewares);
         }
 
         console.log();
