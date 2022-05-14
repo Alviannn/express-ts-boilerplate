@@ -76,9 +76,9 @@ function mapRequestHandlers(
 function mapRoutes(globalRouter: Router) {
     const { controllers, handlers } = routingMap;
 
-    for (const [className, controller] of Object.entries(controllers)) {
+    for (const [classConstructor, controller] of controllers.entries()) {
         const currentRouter = Router();
-        const reqHandlerList = handlers[className];
+        const reqHandlerList = handlers.get(classConstructor);
 
         // skip empty controllers
         if (!reqHandlerList) {

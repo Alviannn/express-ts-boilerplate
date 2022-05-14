@@ -18,8 +18,8 @@ import type {
  * Later on, this will be used to register to express routers.
  */
 export const routingMap: RoutingMap = {
-    controllers: {},
-    handlers: {}
+    controllers: new Map(),
+    handlers: new Map()
 };
 
 /**
@@ -50,11 +50,11 @@ export function Controller(options: ControllerOptions): ClassDecorator {
         const targetObj = new target.prototype.constructor();
         const { controllers } = routingMap;
 
-        controllers[target.name] = {
+        controllers.set(target, {
             path: `/v${version ?? 1}/${path}`,
             middlewares: middlewares ?? [],
             targetObj
-        };
+        });
     };
 }
 
@@ -103,14 +103,14 @@ export function ReqHandler(
         }
 
         const funcName = key as string;
-        const controllerClassName = target.constructor.name;
+        const controllerConstructor = target.constructor;
         const { handlers } = routingMap;
 
-        if (!(controllerClassName in handlers)) {
-            handlers[controllerClassName] = [] as never;
+        if (!handlers.has(controllerConstructor)) {
+            handlers.set(controllerConstructor, []);
         }
 
-        const handlerStore = handlers[controllerClassName];
+        const handlerStore = handlers.get(controllerConstructor)!;
         handlerStore.push({
             path,
             method,

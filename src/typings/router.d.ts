@@ -16,6 +16,15 @@ import type {
     Router
 } from 'express';
 
+/**
+ * Allow function type for class constructors to use it
+ * as a key for {@link RoutingMap}.
+ *
+ * With this we can avoid errors when using the same class names.
+ */
+// eslint-disable-next-line @typescript-eslint/ban-types
+export type ClassConstructor = Function;
+
 export type RequestMethods = 'GET' | 'POST' | 'DELETE' | 'PUT' | 'PATCH';
 
 /**
@@ -86,8 +95,8 @@ export interface ReqHandlerDataType {
 }
 
 export interface RoutingMap {
-    controllers: Record<string, ControllerDataType>;
-    handlers: Record<string, ReqHandlerDataType[]>;
+    controllers: Map<ClassConstructor, ControllerDataType>;
+    handlers: Map<ClassConstructor, ReqHandlerDataType[]>;
 }
 
 // ---------------------------------------------------- //
