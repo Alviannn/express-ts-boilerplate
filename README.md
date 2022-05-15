@@ -7,7 +7,15 @@ because I have been using it for my projects or other projects that is using thi
 
 To see the dependencies used in this boilerplate, [go here](#dependencies).
 
-# Entity-Relationship Diagram
+## Table of Contents
+- [Entity-Relationship Diagram](#entity-relationship-diagram)
+- [Quick Start](#quick-start)
+- [Project Structure](#project-structure)
+- [Commands](#commands)
+- [Environment Variables](#environment-variables)
+- [Dependencies](#dependencies)
+
+## Entity-Relationship Diagram
 \<insert ERD here>
 
 ## Quick Start
