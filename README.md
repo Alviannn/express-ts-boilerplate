@@ -52,7 +52,7 @@ To see the dependencies used in this boilerplate, [go here](#dependencies).
         |--v1             # The first major version of the controllers
     |--database\          # Database related code
         |--entities\      # Database models/entities (represents table)
-        |--ormconfig.ts   # TypeORM datasource configuration
+        |--datasource.ts  # TypeORM datasource configuration
     |--decorators\        # Custom decorators
     |--middlewares\       # Custom middlewares
     |--routes\            # Server routes, provides automatic routing
