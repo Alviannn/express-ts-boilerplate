@@ -31,7 +31,7 @@ export class TodosRoute {
         });
     }
 
-    @ReqHandler('POST', '/add', validate(newTodoSchema))
+    @ReqHandler('POST', '/', validate(newTodoSchema))
     async add(req: Request, res: Response) {
         const { content } = req.body as NewTodoType;
         const todoId = await todoService.add(content);
@@ -54,7 +54,7 @@ export class TodosRoute {
         });
     }
 
-    @ReqHandler('DELETE', '/delete/:todoId', validate(todoIdSchema, 'PARAMS'))
+    @ReqHandler('DELETE', '/:todoId', validate(todoIdSchema, 'PARAMS'))
     async delete(req: Request, res: Response) {
         const { todoId } = req.params as unknown as TodoIdType;
         await todoService.delete(todoId);
@@ -63,7 +63,7 @@ export class TodosRoute {
     }
 
     @ReqHandler(
-        'PATCH', '/update/:todoId',
+        'PATCH', '/:todoId',
         validate(updateTodoSchema),
         validate(todoIdSchema, 'PARAMS')
     )
