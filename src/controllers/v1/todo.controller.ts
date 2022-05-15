@@ -21,6 +21,16 @@ import type {
 @Controller({ path: 'todos' })
 export class TodosRoute {
 
+    @ReqHandler('GET', '/')
+    async getAll(_: Request, res: Response) {
+        const todos = await Todo.find();
+
+        return sendResponse(res, {
+            message: 'Successfully found todos',
+            data: { todos }
+        });
+    }
+
     @ReqHandler('POST', '/add', validate(newTodoSchema))
     async add(req: Request, res: Response) {
         const { content } = req.body as NewTodoType;
@@ -31,6 +41,25 @@ export class TodosRoute {
             statusCode: StatusCodes.CREATED,
             data: { todoId }
         });
+    }
+
+    @ReqHandler('GET', '/:todoId', validate(todoIdSchema, 'PARAMS'))
+    async getById(req: Request, res: Response) {
+        const { todoId } = req.params as unknown as TodoIdType;
+        const todo = await todoService.get(todoId);
+
+        return sendResponse(res, {
+            message: 'Successfully found todo',
+            data: { todo }
+        });
+    }
+
+    @ReqHandler('DELETE', '/delete/:todoId', validate(todoIdSchema, 'PARAMS'))
+    async delete(req: Request, res: Response) {
+        const { todoId } = req.params as unknown as TodoIdType;
+        await todoService.delete(todoId);
+
+        return sendResponse(res, { message: 'Successfully deleted a todo' });
     }
 
     @ReqHandler(
@@ -45,35 +74,6 @@ export class TodosRoute {
         await todoService.update(todoId, content, isDone);
 
         return sendResponse(res, { message: 'Successfully updated todo' });
-    }
-
-    @ReqHandler('DELETE', '/delete/:todoId', validate(todoIdSchema, 'PARAMS'))
-    async delete(req: Request, res: Response) {
-        const { todoId } = req.params as unknown as TodoIdType;
-        await todoService.delete(todoId);
-
-        return sendResponse(res, { message: 'Successfully deleted a todo' });
-    }
-
-    @ReqHandler('GET', '/:todoId', validate(todoIdSchema, 'PARAMS'))
-    async getById(req: Request, res: Response) {
-        const { todoId } = req.params as unknown as TodoIdType;
-        const todo = await todoService.get(todoId);
-
-        return sendResponse(res, {
-            message: 'Successfully found todo',
-            data: { todo }
-        });
-    }
-
-    @ReqHandler('GET', '/')
-    async getAll(_: Request, res: Response) {
-        const todos = await Todo.find();
-
-        return sendResponse(res, {
-            message: 'Successfully found todos',
-            data: { todos }
-        });
     }
 
 }
