@@ -22,7 +22,7 @@ To see the dependencies used in this boilerplate, [go here](#dependencies).
 1. Make sure you have installed [Yarn](https://classic.yarnpkg.com/lang/en/) and [PostgreSQL](https://www.postgresql.org/download/).
 1. Clone the repo
    ```sh
-   git clone <git repo url>
+   git clone https://github.com/Alviannn/express-ts-boilerplate.git
    ```
 1. Install the dependencies
    ```sh
