@@ -86,7 +86,10 @@ function mapRoutes(globalRouter: Router) {
         }
 
         if (controller.middlewares.length) {
-            currentRouter.use(...controller.middlewares);
+            const middlewares = controller.middlewares
+                .map((handler) => handlerWrapAsync(handler));
+
+            currentRouter.use(middlewares);
         }
 
         console.log();
