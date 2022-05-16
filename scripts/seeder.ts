@@ -15,7 +15,11 @@ import { DateTime } from 'luxon';
 
 const DEFAULT_PHONE = '628174991828';
 
-async function createData() {
+function randomRange(min: number, max: number) {
+    return Math.floor(Math.random() * (max - min + 1) + min);
+}
+
+async function insertData() {
     const users: User[] = [
         User.create({
             fullName: 'John Doe',
@@ -30,17 +34,21 @@ async function createData() {
             password: await authService.hashPassword('Alvian123?')
         })
     ];
+    await User.save(users);
 
     const todos: Todo[] = [
         Todo.create({
+            user: users[randomRange(0, users.length - 1)],
             content: 'Play VALORANT tonight'
         }),
         Todo.create({
+            user: users[randomRange(0, users.length - 1)],
             content: 'Do android mobile homework',
             updatedAt: DateTime.utc().minus({ days: 2, hours: 6 }),
             createdAt: DateTime.utc().minus({ days: 3 })
         })
     ];
+    await Todo.save(todos);
 
     return { users, todos };
 }
@@ -49,10 +57,7 @@ async function createData() {
 
 appDataSource.initialize()
     .then(async () => {
-        const { users, todos } = await createData();
-
-        await User.save(users);
-        await Todo.save(todos);
+        await insertData();
 
         logger.debug('Data seeding has finished!');
         process.exit();
