@@ -16,7 +16,7 @@ To see the dependencies used in this boilerplate, [go here](#dependencies).
 - [Dependencies](#dependencies)
 
 ## Entity-Relationship Diagram
-\<insert ERD here>
+![erd](.github/ERD.png)
 
 ## Quick Start
 1. Make sure you have installed [Yarn](https://classic.yarnpkg.com/lang/en/) and [PostgreSQL](https://www.postgresql.org/download/).
