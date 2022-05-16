@@ -1,7 +1,10 @@
 import { StatusCodes } from 'http-status-codes';
 import { DateTime } from 'luxon';
-import { Todo } from '../database/entities/todo.entity';
 import { ResponseError } from '../utils/api.util';
+import { Todo } from '../database/entities/todo.entity';
+import { User } from '../database/entities/user.entity';
+
+import type { FindManyOptions, FindOneOptions } from 'typeorm';
 
 const TodoNotFoundError = new ResponseError(
     'Cannot find todo',
@@ -9,15 +12,36 @@ const TodoNotFoundError = new ResponseError(
 
 class TodoService {
 
-    async add(content: string) {
-        const todo = Todo.create({ content });
+    private createFindOption(
+        userId: number,
+        todoId?: number): FindOneOptions<Todo> | FindManyOptions<Todo> {
+
+        return {
+            where: {
+                id: todoId,
+                userId
+            },
+            relations: {
+                user: true
+            }
+        };
+    }
+
+    async add(userId: number, content: string) {
+        const user = (await User.findOneBy({ id: userId }))!;
+        const todo = Todo.create({ content, user });
+
         await todo.save();
 
         return todo.id;
     }
 
-    async update(id: number, content?: string, isDone?: boolean) {
-        const todo = await Todo.findOneBy({ id });
+    async update(
+        userId: number, todoId: number,
+        content?: string, isDone?: boolean) {
+
+        const findOptions = this.createFindOption(userId, todoId);
+        const todo = await Todo.findOne(findOptions);
 
         if (!todo) {
             throw TodoNotFoundError;
@@ -30,8 +54,9 @@ class TodoService {
         await todo.save();
     }
 
-    async delete(id: number) {
-        const todo = await Todo.findOneBy({ id });
+    async delete(userId: number, todoId: number) {
+        const findOptions = this.createFindOption(userId, todoId);
+        const todo = await Todo.findOne(findOptions);
 
         if (!todo) {
             throw TodoNotFoundError;
@@ -40,14 +65,20 @@ class TodoService {
         await todo.remove();
     }
 
-    async get(id: number) {
-        const todo = await Todo.findOneBy({ id });
+    async get(userId: number, todoId: number) {
+        const findOptions = this.createFindOption(userId, todoId);
+        const todo = await Todo.findOne(findOptions);
 
         if (!todo) {
             throw TodoNotFoundError;
         }
 
         return todo;
+    }
+
+    async getAll(userId: number) {
+        const findOptions = this.createFindOption(userId);
+        return Todo.find(findOptions);
     }
 
 }
