@@ -5,7 +5,7 @@
 
 import logger from '../src/utils/logger.util';
 
-import { appDataSource } from '../src/database/ormconfig';
+import { appDataSource } from '../src/database/datasource';
 import { authService } from '../src/services/auth.service';
 import { User } from '../src/database/entities/user.entity';
 import { Todo } from '../src/database/entities/todo.entity';
