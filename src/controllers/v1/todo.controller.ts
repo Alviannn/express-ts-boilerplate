@@ -3,9 +3,14 @@ import authenticate from '../../middlewares/authenticate.middleware';
 
 import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
-import { Controller, ReqHandler } from '../../internals/decorators/express.decorator';
 import { sendResponse } from '../../utils/api.util';
 import { todoService } from '../../services/todo.service';
+
+import {
+    Controller,
+    ReqHandler
+} from '../../internals/decorators/express.decorator';
+
 import {
     newTodoSchema,
     updateTodoSchema,
