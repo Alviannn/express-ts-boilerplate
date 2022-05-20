@@ -73,7 +73,7 @@ function mapRequestHandlers(
     console.log(msg);
 }
 
-function mapRoutes(globalRouter: Router) {
+function mapRoutes(expressRouter: Router) {
     const { controllers, handlers } = routingMap;
 
     for (const [classConstructor, controller] of controllers.entries()) {
@@ -98,7 +98,7 @@ function mapRoutes(globalRouter: Router) {
             mapRequestHandlers(currentRouter, controller, reqHandler);
         }
 
-        globalRouter.use(controller.path, currentRouter);
+        expressRouter.use(controller.path, currentRouter);
     }
 }
 
@@ -131,7 +131,7 @@ async function importRoutes(filePath: string) {
  * To bind all of the routes easily from the `controllers/` directory,
  * we can make use of the {@link Router} to achieve that.
  */
-export async function createGlobalRouter(): Promise<Router> {
+export async function createExpressRouter(): Promise<Router> {
     const controllersDir = path.join(__dirname, '..', 'controllers/');
     await importRoutes(controllersDir);
 
