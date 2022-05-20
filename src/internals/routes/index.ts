@@ -12,7 +12,7 @@ import path from 'node:path';
 
 import { Router } from 'express';
 import { routeMeta } from '../decorators/express.decorator';
-import { ANSI } from '../utils/ansi.util';
+import { ANSI } from '../../utils/ansi.util';
 
 import type { Request, Response, NextFunction } from 'express';
 import type {
@@ -21,7 +21,7 @@ import type {
     HandlerFn,
     ExpressRouter,
     WrappedHandlerFn
-} from '../typings/router';
+} from '../../typings/router';
 
 /**
  * Wraps a request handler or middleware handler inside a {@link Promise}.
@@ -132,7 +132,7 @@ async function importRoutes(filePath: string) {
  * we can make use of the {@link Router} to achieve that.
  */
 export async function createExpressRouter(): Promise<Router> {
-    const controllersDir = path.join(__dirname, '..', 'controllers/');
+    const controllersDir = path.join(__dirname, '../../', 'controllers/');
     await importRoutes(controllersDir);
 
     const router = Router();

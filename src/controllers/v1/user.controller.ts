@@ -1,7 +1,7 @@
 import authenticate from '../../middlewares/authenticate.middleware';
 
 import { Request, Response } from 'express';
-import { Controller, ReqHandler } from '../../decorators/express.decorator';
+import { Controller, ReqHandler } from '../../internals/decorators/express.decorator';
 import { sendResponse } from '../../utils/api.util';
 import { userService } from '../../services/user.service';
 

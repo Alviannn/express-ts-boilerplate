@@ -53,9 +53,10 @@ To see the dependencies used in this boilerplate, [go here](#dependencies).
     |--database\          # Database related code
         |--entities\      # Database models/entities (represents table)
         |--datasource.ts  # TypeORM datasource configuration
-    |--decorators\        # Custom decorators
+    |--internals          # Internal functionalities (you will rarely touch this)
+        |--decorators\    # Custom decorators
+        |--routes\        # Server routes, provides automatic routing
     |--middlewares\       # Custom middlewares
-    |--routes\            # Server routes, provides automatic routing
     |--service\           # Business logic (service layer)
     |--typings\           # Custom types/interface for type assertion
     |--utils\             # Utility functions and/or classes

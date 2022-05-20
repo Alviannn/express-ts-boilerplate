@@ -3,7 +3,7 @@ import errorHandling from './middlewares/error-handler.middleware';
 import logger from './utils/logger.util';
 
 import { appDataSource } from './database/datasource';
-import { createExpressRouter } from './routes';
+import { createExpressRouter } from './internals/routes';
 
 const port = process.env.PORT ?? 5000;
 

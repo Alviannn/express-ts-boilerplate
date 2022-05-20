@@ -13,7 +13,7 @@ import type {
     ClassType,
     ControllerMeta,
     HandlerMeta
-} from '../typings/router';
+} from '../../typings/router';
 
 /**
  * Stores `controller`s and `request handler`s data.

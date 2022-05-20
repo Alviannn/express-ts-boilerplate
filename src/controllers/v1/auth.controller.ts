@@ -2,7 +2,7 @@ import authenticate from '../../middlewares/authenticate.middleware';
 import validate from '../../middlewares/validate.middleware';
 
 import { Request, Response } from 'express';
-import { Controller, ReqHandler } from '../../decorators/express.decorator';
+import { Controller, ReqHandler } from '../../internals/decorators/express.decorator';
 import { StatusCodes } from 'http-status-codes';
 import { authService } from '../../services/auth.service';
 import { loginSchema, registerSchema } from '../../validations/user.validation';
