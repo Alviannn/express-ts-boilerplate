@@ -11,16 +11,16 @@ import fs from 'fs';
 import path from 'node:path';
 
 import { Router } from 'express';
-import { routingMap } from '../decorators/express.decorator';
+import { routeMeta } from '../decorators/express.decorator';
 import { ANSI } from '../utils/ansi.util';
 
 import type { Request, Response, NextFunction } from 'express';
 import type {
-    AsyncHandlerWrapper,
-    ControllerDataType,
-    ReqHandlerDataType,
-    HandlerFunction,
-    RouterHandlerType
+    ControllerMeta,
+    HandlerMeta,
+    HandlerFn,
+    ExpressRouter,
+    WrappedHandlerFn
 } from '../typings/router';
 
 /**
@@ -33,7 +33,7 @@ import type {
  * Why? Because there's {@link Promise.catch} which means we can use it
  * to "catch" the error, and then pass it to `next` function.
  */
-function handlerWrapAsync(handler: HandlerFunction): AsyncHandlerWrapper {
+function wrapHandler(handler: HandlerFn): WrappedHandlerFn {
     return async (req: Request, res: Response, next: NextFunction) => {
         try {
             await handler(req, res, next);
@@ -45,8 +45,8 @@ function handlerWrapAsync(handler: HandlerFunction): AsyncHandlerWrapper {
 
 function mapRequestHandlers(
     router: Router,
-    controller: ControllerDataType,
-    reqHandler: ReqHandlerDataType) {
+    controller: ControllerMeta,
+    reqHandler: HandlerMeta) {
 
     const {
         path: handlerPath,
@@ -55,16 +55,16 @@ function mapRequestHandlers(
         method
     } = reqHandler;
 
-    const handlerFunc = controller.targetObj[handlerName] as HandlerFunction;
-    const handlerList = [...middlewares, handlerFunc]
-        .map((handler) => handlerWrapAsync(handler));
+    const handlerFunc = controller.targetObj[handlerName] as HandlerFn;
+    const wrappedHandlers = [...middlewares, handlerFunc]
+        .map((handler) => wrapHandler(handler));
 
     // allow the express router to accept string as its methods
     // based on HTTP request methods.
-    const routerObject = router as unknown as RouterHandlerType;
+    const routerObject = router as unknown as ExpressRouter;
     const routerMethodName = method.toLowerCase();
 
-    routerObject[routerMethodName](handlerPath, ...handlerList);
+    routerObject[routerMethodName](handlerPath, ...wrappedHandlers);
 
     const msg = `{color}${method} \t${controller.path}${handlerPath}{reset}`
         .replace('{color}', ANSI.GREEN)
@@ -74,7 +74,7 @@ function mapRequestHandlers(
 }
 
 function mapRoutes(expressRouter: Router) {
-    const { controllers, handlers } = routingMap;
+    const { controllers, handlers } = routeMeta;
 
     for (const [classConstructor, controller] of controllers.entries()) {
         const currentRouter = Router();
@@ -87,7 +87,7 @@ function mapRoutes(expressRouter: Router) {
 
         if (controller.middlewares.length) {
             const middlewares = controller.middlewares
-                .map((handler) => handlerWrapAsync(handler));
+                .map((handler) => wrapHandler(handler));
 
             currentRouter.use(middlewares);
         }

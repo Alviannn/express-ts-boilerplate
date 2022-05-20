@@ -23,7 +23,7 @@ import type {
  * With this we can avoid errors when using the same class names.
  */
 // eslint-disable-next-line @typescript-eslint/ban-types
-export type ClassConstructor = Function;
+export type ClassType = Function;
 
 export type RequestMethods = 'GET' | 'POST' | 'DELETE' | 'PUT' | 'PATCH';
 
@@ -32,15 +32,11 @@ export type RequestMethods = 'GET' | 'POST' | 'DELETE' | 'PUT' | 'PATCH';
  * But I have to, somehow, make a type that accepts it for the request handlers
  * and router method functions.
  */
-export type HandlerFunction =
-    (req: Request, res: Response, next: NextFunction)
-        => unknown | Promise<unknown>;
+export type HandlerFn = (req: Request, res: Response, next: NextFunction)
+    => unknown | Promise<unknown>;
 
-/**
- * @see {@link import('../routes').handlerWrapAsync}
- */
-export type AsyncHandlerWrapper =
-    (req: Request, res: Response, next: NextFunction) => Promise<unknown>;
+export type WrappedHandlerFn = (req: Request, res: Response, next: NextFunction)
+    => Promise<unknown>
 
 // ---------------------------------------------------- //
 
@@ -48,10 +44,9 @@ export type AsyncHandlerWrapper =
  * Replicates the function to register a router
  * such as from {@link Router.get}.
  *
- * @see {@link RouterHandlerType}
+ * @see {@link ExpressRouter}
  */
-export type RouterFunction =
-    (path: string, ...handlers: AsyncHandlerWrapper[]) => void;
+export type RouterFn = (path: string, ...handlers: WrappedHandlerFn[]) => void;
 
 /**
  * Inside {@link Router}, there are functions to register a request handler
@@ -61,42 +56,37 @@ export type RouterFunction =
  * Therefore, I'm forcing the module to accept a string to run the function
  * based on {@link RequestMethods}.
  */
-export type RouterHandlerType = Record<string, RouterFunction>
+export type ExpressRouter = Record<string, RouterFn>
 
 // ---------------------------------------------------- //
 
 /**
  * Stores the information from `Controller` decorator.
  */
-export interface ControllerDataType {
+export interface ControllerMeta {
     path: string;
-    middlewares: HandlerFunction[];
+    middlewares: HandlerFn[];
     /**
      * The class that holds the `Route` is stored here
      * so we can grab the functions (the `Controller`) within it.
      */
-    targetObj: Record<string, HandlerFunction>;
+    targetObj: Record<string, HandlerFn>;
 }
 
 /**
  * Stores the information from `ReqHandler` decorator.
  */
-export interface ReqHandlerDataType {
+export interface HandlerMeta {
     path: string;
     method: RequestMethods;
     /**
      * The method name for the specific `ReqHandler`,
      * which is used for executing the request handler upon being called.
      *
-     * This is connected with the {@link RouteDataType.targetObj}
+     * This is connected with the {@link ControllerMeta.targetObj}
      */
     handlerName: string;
-    middlewares: HandlerFunction[];
-}
-
-export interface RoutingMap {
-    controllers: Map<ClassConstructor, ControllerDataType>;
-    handlers: Map<ClassConstructor, ReqHandlerDataType[]>;
+    middlewares: HandlerFn[];
 }
 
 // ---------------------------------------------------- //
@@ -141,5 +131,5 @@ export interface ControllerOptions {
      *
      * @default []
      */
-    middlewares?: HandlerFunction[];
+    middlewares?: HandlerFn[];
 }

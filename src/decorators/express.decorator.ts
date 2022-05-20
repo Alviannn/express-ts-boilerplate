@@ -8,18 +8,20 @@
  ***************************************************************************/
 
 import type {
-    HandlerFunction, RequestMethods,
-    RoutingMap, ControllerOptions
+    HandlerFn, RequestMethods,
+    ControllerOptions,
+    ClassType,
+    ControllerMeta,
+    HandlerMeta
 } from '../typings/router';
 
 /**
- * Stores informations about all routing decorators.
- *
- * Later on, this will be used to register to express routers.
+ * Stores `controller`s and `request handler`s data.
+ * This will be used to for express router registration.
  */
-export const routingMap: RoutingMap = {
-    controllers: new Map(),
-    handlers: new Map()
+export const routeMeta = {
+    controllers: new Map<ClassType, ControllerMeta>(),
+    handlers: new Map<ClassType, HandlerMeta[]>()
 };
 
 /**
@@ -45,10 +47,8 @@ export function Controller(options: ControllerOptions): ClassDecorator {
             throw Error("Controller path cannot start or end with'/'!");
         }
 
-        // instantiate the object, so we can use the
-        // methods or request handlers within the class.
         const targetObj = new target.prototype.constructor();
-        const { controllers } = routingMap;
+        const { controllers } = routeMeta;
 
         controllers.set(target, {
             path: `/v${version ?? 1}/${path}`,
@@ -76,7 +76,7 @@ export function Controller(options: ControllerOptions): ClassDecorator {
 export function ReqHandler(
     method: RequestMethods,
     path: string,
-    ...middlewares: HandlerFunction[]): MethodDecorator {
+    ...middlewares: HandlerFn[]): MethodDecorator {
 
     return (target, key, { value: func }) => {
         if (!func || typeof key !== 'string') {
@@ -104,7 +104,7 @@ export function ReqHandler(
 
         const funcName = key as string;
         const controllerConstructor = target.constructor;
-        const { handlers } = routingMap;
+        const { handlers } = routeMeta;
 
         if (!handlers.has(controllerConstructor)) {
             handlers.set(controllerConstructor, []);
