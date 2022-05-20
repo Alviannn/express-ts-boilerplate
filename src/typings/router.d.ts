@@ -85,7 +85,7 @@ export interface HandlerMeta {
      *
      * This is connected with the {@link ControllerMeta.instance}
      */
-    handlerFn: string;
+    fnName: string;
     middlewares: HandlerFn[];
 }
 

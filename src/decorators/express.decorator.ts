@@ -114,7 +114,7 @@ export function ReqHandler(
         handlerList.push({
             path,
             method,
-            handlerFn,
+            fnName: handlerFn,
             middlewares
         });
     };

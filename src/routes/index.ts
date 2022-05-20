@@ -46,17 +46,17 @@ function wrapHandler(handler: HandlerFn): WrappedHandlerFn {
 function mapRequestHandlers(
     router: Router,
     controller: ControllerMeta,
-    reqHandler: HandlerMeta) {
+    handlerMeta: HandlerMeta) {
 
     const {
         path: handlerPath,
         middlewares,
-        handlerFn: handlerName,
+        fnName,
         method
-    } = reqHandler;
+    } = handlerMeta;
 
-    const handlerFunc = controller.instance[handlerName] as HandlerFn;
-    const wrappedHandlers = [...middlewares, handlerFunc]
+    const handlerFn = controller.instance[fnName] as HandlerFn;
+    const wrappedHandlers = [...middlewares, handlerFn]
         .map((handler) => wrapHandler(handler));
 
     // allow the express router to accept string as its methods
