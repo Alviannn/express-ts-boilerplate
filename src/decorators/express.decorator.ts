@@ -41,19 +41,19 @@ export function Controller(options: ControllerOptions): ClassDecorator {
     return (target) => {
         const { path, version, middlewares } = options;
 
-        // request path cannot start or end with '/'
+        // request path shouldn't start or end with '/'
         // because express.js can't interpret it.
         if (path.startsWith('/') || path.endsWith('/')) {
-            throw Error("Controller path cannot start or end with'/'!");
+            throw Error("Controller path cannot start or end with '/'!");
         }
 
-        const targetObj = new target.prototype.constructor();
+        const instance = new target.prototype.constructor();
         const { controllers } = routeMeta;
 
         controllers.set(target, {
             path: `/v${version ?? 1}/${path}`,
             middlewares: middlewares ?? [],
-            targetObj
+            instance
         });
     };
 }
@@ -102,19 +102,19 @@ export function ReqHandler(
             }
         }
 
-        const funcName = key as string;
-        const controllerConstructor = target.constructor;
+        const handlerFn = key as string;
+        const controllerClass = target.constructor;
         const { handlers } = routeMeta;
 
-        if (!handlers.has(controllerConstructor)) {
-            handlers.set(controllerConstructor, []);
+        if (!handlers.has(controllerClass)) {
+            handlers.set(controllerClass, []);
         }
 
-        const handlerStore = handlers.get(controllerConstructor)!;
-        handlerStore.push({
+        const handlerList = handlers.get(controllerClass)!;
+        handlerList.push({
             path,
             method,
-            handlerName: funcName,
+            handlerFn,
             middlewares
         });
     };

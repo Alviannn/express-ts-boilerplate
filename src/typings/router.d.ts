@@ -70,7 +70,7 @@ export interface ControllerMeta {
      * The class that holds the `Route` is stored here
      * so we can grab the functions (the `Controller`) within it.
      */
-    targetObj: Record<string, HandlerFn>;
+    instance: Record<string, HandlerFn>;
 }
 
 /**
@@ -80,12 +80,12 @@ export interface HandlerMeta {
     path: string;
     method: RequestMethods;
     /**
-     * The method name for the specific `ReqHandler`,
+     * The function/method name for a specific `ReqHandler`,
      * which is used for executing the request handler upon being called.
      *
-     * This is connected with the {@link ControllerMeta.targetObj}
+     * This is connected with the {@link ControllerMeta.instance}
      */
-    handlerName: string;
+    handlerFn: string;
     middlewares: HandlerFn[];
 }
 

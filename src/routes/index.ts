@@ -51,11 +51,11 @@ function mapRequestHandlers(
     const {
         path: handlerPath,
         middlewares,
-        handlerName,
+        handlerFn: handlerName,
         method
     } = reqHandler;
 
-    const handlerFunc = controller.targetObj[handlerName] as HandlerFn;
+    const handlerFunc = controller.instance[handlerName] as HandlerFn;
     const wrappedHandlers = [...middlewares, handlerFunc]
         .map((handler) => wrapHandler(handler));
 
