@@ -5,7 +5,7 @@ import config from '../configs/config';
 import { StatusCodes } from 'http-status-codes';
 import { RefreshToken } from '../database/entities/refresh-token.entity';
 import { User } from '../database/entities/user.entity';
-import { ResponseError } from '../utils/api.util';
+import { REFRESH_TOKEN_COOKIE, ResponseError } from '../utils/api.util';
 
 import type { JwtPayload } from 'jsonwebtoken';
 import type { UserPayload, TokenType, AuthTokens } from '../typings/auth';
@@ -109,7 +109,7 @@ class AuthService {
 
             token = rawToken.replace(prefix, '');
         } else {
-            token = req.cookies.refreshToken;
+            token = req.cookies[REFRESH_TOKEN_COOKIE];
         }
 
         return token;
