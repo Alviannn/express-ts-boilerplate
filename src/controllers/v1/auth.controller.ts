@@ -1,10 +1,10 @@
 import authenticate from '../../middlewares/authenticate.middleware';
-import validate from '../../middlewares/validate.middleware';
 
 import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import { authService } from '../../services/auth.service';
 import { loginSchema, registerSchema } from '../../validations/user.validation';
+import { validate } from '../../utils/validate.util';
 
 import {
     Controller,
@@ -17,25 +17,20 @@ import {
     REFRESH_TOKEN_COOKIE
 } from '../../utils/api.util';
 
-import type {
-    LoginType,
-    RegisterType
-} from '../../validations/user.validation';
-
 @Controller({ path: 'auth' })
 export class AuthRoute {
 
-    @ReqHandler('POST', '/login', validate(loginSchema))
+    @ReqHandler('POST', '/login')
     async login(req: Request, res: Response) {
-        const body = req.body as LoginType;
+        const body = validate(req, loginSchema);
         const tokens = await authService.login(body);
 
         return sendAuthTokens(res, tokens);
     }
 
-    @ReqHandler('POST', '/register', validate(registerSchema))
+    @ReqHandler('POST', '/register')
     async register(req: Request, res: Response) {
-        const body = req.body as RegisterType;
+        const body = validate(req, registerSchema);
         await authService.register(body);
 
         return sendResponse(res, {
