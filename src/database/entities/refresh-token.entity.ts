@@ -1,18 +1,13 @@
-import { BaseEntity, Column, Entity, PrimaryColumn } from 'typeorm';
 import { DateTime } from 'luxon';
-import { dateTransformer } from '.';
+import { BaseEntity, Entity, PrimaryKey, Property } from '@mikro-orm/core';
 
-@Entity('refresh_tokens')
-export class RefreshToken extends BaseEntity {
+@Entity({ tableName: 'refresh_tokens' })
+export class RefreshToken extends BaseEntity<RefreshToken, 'token'> {
 
-    @PrimaryColumn()
+    @PrimaryKey({ autoincrement: false })
     token!: string;
 
-    @Column({
-        name: 'created_at',
-        type: 'timestamp',
-        transformer: dateTransformer
-    })
-    createdAt = DateTime.utc();
+    @Property({ columnType: 'timestamp', defaultRaw: 'now()' })
+    createdAt!: DateTime;
 
 }

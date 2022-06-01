@@ -3,8 +3,7 @@ import { DateTime } from 'luxon';
 import { ResponseError } from '../utils/api.util';
 import { Todo } from '../database/entities/todo.entity';
 import { User } from '../database/entities/user.entity';
-
-import type { FindManyOptions, FindOneOptions } from 'typeorm';
+import { orm } from '../database/orm-config';
 
 const TodoNotFoundError = new ResponseError(
     'Cannot find todo',
@@ -12,26 +11,16 @@ const TodoNotFoundError = new ResponseError(
 
 class TodoService {
 
-    private createFindOption(
-        userId: number,
-        todoId?: number): FindOneOptions<Todo> | FindManyOptions<Todo> {
-
-        return {
-            where: {
-                id: todoId,
-                userId
-            },
-            relations: {
-                user: true
-            }
-        };
-    }
+    private readonly em = orm.em.fork();
+    private readonly todoRepo = this.em.getRepository(Todo);
+    private readonly userRepo = this.em.getRepository(User);
 
     async add(userId: number, content: string) {
-        const user = (await User.findOneBy({ id: userId }))!;
-        const todo = Todo.create({ content, user });
+        const user = await this.userRepo.findOneOrFail(userId);
+        const todo = new Todo();
 
-        await todo.save();
+        this.todoRepo.assign(todo, { content, user });
+        await this.todoRepo.persistAndFlush(todo);
 
         return todo.id;
     }
@@ -40,8 +29,13 @@ class TodoService {
         userId: number, todoId: number,
         content?: string, isDone?: boolean) {
 
-        const findOptions = this.createFindOption(userId, todoId);
-        const todo = await Todo.findOne(findOptions);
+        const todo = await this.todoRepo.findOne(
+            {
+                id: todoId,
+                user: { id: userId }
+            },
+            { populate: true }
+        );
 
         if (!todo) {
             throw TodoNotFoundError;
@@ -51,23 +45,34 @@ class TodoService {
         todo.isDone = isDone ?? todo.isDone;
         todo.updatedAt = DateTime.utc();
 
-        await todo.save();
+        await this.todoRepo.persistAndFlush(todo);
     }
 
     async delete(userId: number, todoId: number) {
-        const findOptions = this.createFindOption(userId, todoId);
-        const todo = await Todo.findOne(findOptions);
+        const todo = await this.todoRepo.findOne(
+            {
+                id: todoId,
+                user: { id: userId }
+            },
+            { populate: true }
+        );
 
         if (!todo) {
             throw TodoNotFoundError;
         }
 
-        await todo.remove();
+        await this.todoRepo.removeAndFlush(todo);
     }
 
     async get(userId: number, todoId: number) {
-        const findOptions = this.createFindOption(userId, todoId);
-        const todo = await Todo.findOne(findOptions);
+        const todo = await this.todoRepo.findOne(
+            {
+                id: todoId,
+                user: { id: userId }
+            },
+            { populate: true }
+        );
+
 
         if (!todo) {
             throw TodoNotFoundError;
@@ -77,8 +82,12 @@ class TodoService {
     }
 
     async getAll(userId: number) {
-        const findOptions = this.createFindOption(userId);
-        return Todo.find(findOptions);
+        const todoList = await this.todoRepo.find(
+            { user: { id: userId } },
+            { populate: true }
+        );
+
+        return todoList;
     }
 
 }

@@ -2,6 +2,7 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import config from '../configs/config';
 
+import { orm } from '../database/orm-config';
 import { StatusCodes } from 'http-status-codes';
 import { RefreshToken } from '../database/entities/refresh-token.entity';
 import { User } from '../database/entities/user.entity';
@@ -9,13 +10,18 @@ import { REFRESH_TOKEN_COOKIE, ResponseError } from '../utils/api.util';
 
 import type { JwtPayload } from 'jsonwebtoken';
 import type { UserPayload, TokenType, AuthTokens } from '../typings/auth';
-import type { Request } from 'express';
 import type { LoginType, RegisterType } from '../validations/user.validation';
+import type { Request } from 'express';
 
 class AuthService {
 
+    private readonly em = orm.em.fork();
+    private readonly userRepo = this.em.getRepository(User);
+    private readonly refreshRepo = this.em.getRepository(RefreshToken);
+
     async login({ email, password }: LoginType): Promise<AuthTokens> {
-        const foundUser = await User.findOneBy({ email });
+        const foundUser = await this.userRepo.findOne({ email });
+
         if (!foundUser) {
             throw new ResponseError(
                 'Account is not registered!',
@@ -39,9 +45,9 @@ class AuthService {
     }
 
     async register(rawUser: RegisterType) {
-        const user = User.create({ ...rawUser });
+        const user = new User().assign(rawUser);
 
-        const foundUser = await User.findOneBy({ email: user.email });
+        const foundUser = await this.userRepo.findOne({ email: user.email });
         if (foundUser) {
             throw new ResponseError(
                 'This email is already registered',
@@ -49,15 +55,16 @@ class AuthService {
         }
 
         user.password = await this.hashPassword(user.password);
-        await User.save(user);
+        await this.userRepo.persistAndFlush(user);
     }
 
     async logout(refreshToken: string) {
-        const foundToken = await RefreshToken.findOneBy({
-            token: refreshToken
-        });
+        const foundToken = await this.refreshRepo
+            .findOne({ token: refreshToken });
 
-        await foundToken?.remove();
+        if (foundToken) {
+            this.refreshRepo.removeAndFlush(foundToken);
+        }
     }
 
     async hashPassword(password: string) {
@@ -80,8 +87,10 @@ class AuthService {
 
         const token = jwt.sign(payload, tokenSecret, signOption);
         if (tokenType === 'REFRESH') {
-            const newToken = RefreshToken.create({ token });
-            await newToken.save();
+            const newToken = new RefreshToken()
+                .assign({ token });
+
+            await this.refreshRepo.persistAndFlush(newToken);
         }
 
         return token;
@@ -140,7 +149,7 @@ class AuthService {
                 break;
         }
 
-        if (tokenType === 'REFRESH' && !RefreshToken.findOneBy({ token })) {
+        if (tokenType === 'REFRESH' && !this.refreshRepo.findOne({ token })) {
             return;
         }
 

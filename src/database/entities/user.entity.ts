@@ -1,53 +1,38 @@
-import { dateTransformer } from '.';
 import { DateTime } from 'luxon';
 import { Todo } from './todo.entity';
+
 import {
     BaseEntity, Entity,
-    Column, PrimaryGeneratedColumn,
-    OneToMany
-} from 'typeorm';
+    PrimaryKey, Property,
+    OneToMany,
+    Collection,
+} from '@mikro-orm/core';
 
-@Entity('users')
-export class User extends BaseEntity {
+@Entity({ tableName: 'users' })
+export class User extends BaseEntity<User, 'id'> {
 
-    @PrimaryGeneratedColumn()
+    @PrimaryKey()
     id!: number;
 
-    @OneToMany(() => Todo, (todo) => todo.id)
-    todoList!: Todo[];
+    @OneToMany(() => Todo, (todo) => todo.user)
+    todoList = new Collection<Todo>(this);
 
-    @Column({ name: 'full_name', length: 64 })
+    @Property({ length: 64 })
     fullName!: string;
 
-    @Column({ length: 64 })
+    @Property({ length: 64 })
     email!: string;
 
-    @Column({ length: 32 })
+    @Property({ length: 64 })
     phone!: string;
 
-    @Column({ length: 64 })
+    @Property({ length: 64, hidden: true })
     password!: string;
 
-    @Column({
-        name: 'created_at',
-        type: 'timestamp',
-        transformer: dateTransformer
-    })
-    createdAt = DateTime.utc();
+    @Property({ columnType: 'timestamp', defaultRaw: 'now()' })
+    createdAt!: DateTime;
 
-    @Column({
-        name: 'updated_at',
-        type: 'timestamp',
-        transformer: dateTransformer,
-        nullable: true
-    })
+    @Property({ columnType: 'timestamp', nullable: true })
     updatedAt?: DateTime;
-
-    toJSON() {
-        const cloned = { ...this } as Record<string, unknown>;
-        delete cloned.password;
-
-        return cloned;
-    }
 
 }

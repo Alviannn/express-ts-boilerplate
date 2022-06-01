@@ -1,10 +1,14 @@
 import { User } from '../database/entities/user.entity';
 import { Errors } from '../utils/api.util';
+import { orm } from '../database/orm-config';
 
 class UserService {
 
+    private readonly em = orm.em.fork();
+    private readonly userRepo = this.em.getRepository(User);
+
     async get(id: number) {
-        const user = await User.findOneBy({ id });
+        const user = await this.userRepo.findOne({ id });
         if (!user) {
             throw Errors.NO_SESSION;
         }
