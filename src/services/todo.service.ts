@@ -3,7 +3,7 @@ import { DateTime } from 'luxon';
 import { ResponseError } from '../utils/api.util';
 import { Todo } from '../database/entities/todo.entity';
 import { User } from '../database/entities/user.entity';
-import { orm } from '../database/orm-config';
+import { orm } from '../server';
 
 const TodoNotFoundError = new ResponseError(
     'Cannot find todo',

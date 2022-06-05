@@ -2,11 +2,11 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import config from '../configs/config';
 
-import { orm } from '../database/orm-config';
 import { StatusCodes } from 'http-status-codes';
 import { RefreshToken } from '../database/entities/refresh-token.entity';
 import { User } from '../database/entities/user.entity';
 import { REFRESH_TOKEN_COOKIE, ResponseError } from '../utils/api.util';
+import { orm } from '../server';
 
 import type { JwtPayload } from 'jsonwebtoken';
 import type { UserPayload, TokenType, AuthTokens } from '../typings/auth';

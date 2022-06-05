@@ -1,6 +1,6 @@
 import { User } from '../database/entities/user.entity';
 import { Errors } from '../utils/api.util';
-import { orm } from '../database/orm-config';
+import { orm } from '../server';
 
 class UserService {
 

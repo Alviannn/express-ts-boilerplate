@@ -1,29 +1,27 @@
 import config from '../configs/config';
 
-import { MikroORM } from '@mikro-orm/core';
-
 import type { PostgreSqlDriver } from '@mikro-orm/postgresql';
+import type { Configuration, IDatabaseDriver, Options } from '@mikro-orm/core';
 
-export let orm: MikroORM<PostgreSqlDriver>;
+type ORMConfigType<T extends IDatabaseDriver = PostgreSqlDriver> =
+    Options<T> | Configuration<T>;
 
-export async function initOrm() {
-    orm = await MikroORM.init<PostgreSqlDriver>({
-        host: config.db.host,
-        port: config.db.port,
-        dbName: config.db.database,
-        user: config.db.username,
-        password: config.db.password,
+const ormConfig: ORMConfigType = {
+    host: config.db.host,
+    port: config.db.port,
+    dbName: config.db.database,
+    user: config.db.username,
+    password: config.db.password,
 
-        entitiesTs: ['src/database/entities/**/*.entity.ts'],
-        entities: ['build/database/entities/**/*.entity.js'],
+    entitiesTs: ['src/database/entities/**/*.entity.ts'],
+    entities: ['build/database/entities/**/*.entity.js'],
 
-        migrations: {
-            pathTs: 'src/database/migrations/*.migration.ts',
-            path: 'build/database/migrations/*.migration.js'
-        },
+    migrations: {
+        pathTs: 'src/database/migrations/*.migration.ts',
+        path: 'build/database/migrations/*.migration.js'
+    },
 
-        type: 'postgresql',
-    });
+    type: 'postgresql'
+};
 
-    await orm.getSchemaGenerator().updateSchema();
-}
+export default ormConfig;

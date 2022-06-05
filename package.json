@@ -4,12 +4,19 @@
     "description": "My express TypeScript boilerplate",
     "author": "Alvian D.Q. (https://github.com/Alviannn)",
     "license": "MIT",
+    "mikro-orm": {
+        "useTsNode": true,
+        "configPaths": [
+            "./src/database/orm-config.ts",
+            "./build/database/orm-config.js"
+        ]
+    },
     "scripts": {
         "dev": "cross-env NODE_ENV=development ts-node ./src/server.ts",
         "start": "cross-env NODE_ENV=production node ./build/server.js",
         "seed": "cross-env NODE_ENV=development ts-node ./scripts/seeder.ts",
         "clean": "rimraf ./build",
-        "typeorm": "typeorm-ts-node-commonjs",
+        "orm": "mikro-orm",
         "jwt:generate": "ts-node ./scripts/jwt-generate.ts",
         "compile": "yarn clean && tsc",
         "compile:debug": "yarn compile --diagnostics",
