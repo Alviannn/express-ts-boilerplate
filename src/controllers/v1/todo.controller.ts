@@ -1,4 +1,3 @@
-import validate from '../../middlewares/validate.middleware';
 import authenticate from '../../middlewares/authenticate.middleware';
 
 import { Request, Response } from 'express';
@@ -17,11 +16,7 @@ import {
     todoIdSchema
 } from '../../validations/todo.validation';
 
-import type {
-    NewTodoType,
-    UpdateTodoType,
-    TodoIdType
-} from '../../validations/todo.validation';
+import { validate } from '../../utils/validate.util';
 
 @Controller({ path: 'todos', middlewares: [authenticate()] })
 export class TodosRoute {
@@ -37,9 +32,9 @@ export class TodosRoute {
         });
     }
 
-    @ReqHandler('POST', '/', validate(newTodoSchema))
+    @ReqHandler('POST', '/')
     async add(req: Request, res: Response) {
-        const { content } = req.body as NewTodoType;
+        const { content } = validate(req, newTodoSchema);
         const { id: userId } = req.userPayload!;
 
         const todoId = await todoService.add(userId, content);
@@ -51,9 +46,9 @@ export class TodosRoute {
         });
     }
 
-    @ReqHandler('GET', '/:todoId', validate(todoIdSchema, 'PARAMS'))
+    @ReqHandler('GET', '/:todoId')
     async getById(req: Request, res: Response) {
-        const { todoId } = req.params as unknown as TodoIdType;
+        const { todoId } = validate(req, todoIdSchema, 'params');
         const { id: userId } = req.userPayload!;
 
         const todo = await todoService.get(userId, todoId);
@@ -64,9 +59,9 @@ export class TodosRoute {
         });
     }
 
-    @ReqHandler('DELETE', '/:todoId', validate(todoIdSchema, 'PARAMS'))
+    @ReqHandler('DELETE', '/:todoId')
     async delete(req: Request, res: Response) {
-        const { todoId } = req.params as unknown as TodoIdType;
+        const { todoId } = validate(req, todoIdSchema, 'params');
         const { id: userId } = req.userPayload!;
 
         await todoService.delete(userId, todoId);
@@ -74,14 +69,10 @@ export class TodosRoute {
         return sendResponse(res, { message: 'Successfully deleted a todo' });
     }
 
-    @ReqHandler(
-        'PATCH', '/:todoId',
-        validate(updateTodoSchema),
-        validate(todoIdSchema, 'PARAMS')
-    )
+    @ReqHandler('PATCH', '/:todoId',)
     async update(req: Request, res: Response) {
-        const { content, isDone } = req.body as UpdateTodoType;
-        const { todoId } = req.params as unknown as TodoIdType;
+        const { todoId } = validate(req, todoIdSchema, 'params');
+        const { content, isDone } = validate(req, updateTodoSchema);
         const { id: userId } = req.userPayload!;
 
         await todoService.update(userId, todoId, content, isDone);
