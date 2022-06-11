@@ -25,17 +25,17 @@ function pathToLoadORM(type: ORMPathType) {
 
     switch (type) {
         case 'entities':
-            middleExt = 'entity';
+            middleExt = '.entity';
             break;
         case 'migrations':
-            middleExt = 'migration';
+            middleExt = '';
             break;
         case 'subscribers':
-            middleExt = 'subscriber';
+            middleExt = '.subscriber';
             break;
     }
 
-    return `${startDir}/database/${type}/**/*.${middleExt}.${lastExt}`;
+    return `${startDir}/database/${type}/**/*${middleExt}.${lastExt}`;
 }
 
 export const appDataSource = new DataSource({
