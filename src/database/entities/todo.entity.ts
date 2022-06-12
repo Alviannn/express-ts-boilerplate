@@ -1,9 +1,11 @@
+import { User } from './user.entity';
 import { DateTime } from 'luxon';
 import { dateTransformer } from '.';
-import { User } from './user.entity';
+
 import {
-    BaseEntity, Entity,
-    Column, PrimaryGeneratedColumn, JoinColumn,
+    Entity, BaseEntity,
+    Column, JoinColumn, PrimaryGeneratedColumn,
+    CreateDateColumn, UpdateDateColumn, DeleteDateColumn,
     ManyToOne
 } from 'typeorm';
 
@@ -23,23 +25,17 @@ export class Todo extends BaseEntity {
     @Column({ length: 512 })
     content!: string;
 
-    @Column({
-        name: 'created_at',
-        type: 'timestamp',
-        transformer: dateTransformer
-    })
-    createdAt = DateTime.utc();
-
-    @Column({
-        name: 'updated_at',
-        type: 'timestamp',
-        transformer: dateTransformer,
-        nullable: true
-    })
-    updatedAt?: DateTime;
-
     @Column({ name: 'is_done', default: false })
     isDone!: boolean;
+
+    @CreateDateColumn({ name: 'created_at', transformer: dateTransformer })
+    createdAt!: DateTime;
+
+    @UpdateDateColumn({ name: 'updated_at', transformer: dateTransformer })
+    updatedAt?: DateTime;
+
+    @DeleteDateColumn({ name: 'deleted_at', transformer: dateTransformer })
+    deletedAt?: DateTime;
 
     toJSON() {
         const cloned = { ...this } as Record<string, unknown>;
