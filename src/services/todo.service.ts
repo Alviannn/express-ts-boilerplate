@@ -1,5 +1,4 @@
 import { StatusCodes } from 'http-status-codes';
-import { DateTime } from 'luxon';
 import { ResponseError } from '../utils/api.util';
 import { Todo } from '../database/entities/todo.entity';
 import { User } from '../database/entities/user.entity';
@@ -49,7 +48,6 @@ class TodoService {
 
         todo.content = content ?? todo.content;
         todo.isDone = isDone ?? todo.isDone;
-        todo.updatedAt = DateTime.utc();
 
         await todo.save();
     }
