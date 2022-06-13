@@ -80,7 +80,7 @@ class AuthService {
 
         const token = jwt.sign(payload, tokenSecret, signOption);
         if (tokenType === 'REFRESH') {
-            const newToken = RefreshToken.create({ token });
+            const newToken = RefreshToken.create({ token, user });
             await newToken.save();
         }
 
