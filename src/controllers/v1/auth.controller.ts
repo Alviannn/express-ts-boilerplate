@@ -19,7 +19,7 @@ import {
 } from '../../utils/api.util';
 
 @Controller({ path: 'auth' })
-export class AuthRoute {
+export class AuthController {
 
     @ReqHandler('POST', '/login')
     async login(req: Request, res: Response) {

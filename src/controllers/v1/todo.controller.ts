@@ -19,7 +19,7 @@ import {
 import { validate } from '../../utils/validate.util';
 
 @Controller({ path: 'todos', middlewares: [authenticate()] })
-export class TodosRoute {
+export class TodoController {
 
     @ReqHandler('GET', '/')
     async getAll(req: Request, res: Response) {

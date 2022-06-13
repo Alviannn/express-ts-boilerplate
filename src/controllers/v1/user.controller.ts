@@ -10,7 +10,7 @@ import {
 } from '../../internals/decorators/express.decorator';
 
 @Controller({ path: 'users' })
-export class UserRoute {
+export class UserController {
 
     @ReqHandler('GET', '/profile', authenticate())
     async profile(req: Request, res: Response) {
