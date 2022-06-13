@@ -1,4 +1,6 @@
 import authenticate from '../../middlewares/authenticate.middleware';
+import ms from 'ms';
+import config from '../../configs/config';
 
 import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
@@ -13,7 +15,6 @@ import {
 
 import {
     sendResponse,
-    sendAuthTokens,
     REFRESH_TOKEN_COOKIE
 } from '../../utils/api.util';
 
@@ -23,9 +24,17 @@ export class AuthRoute {
     @ReqHandler('POST', '/login')
     async login(req: Request, res: Response) {
         const body = validate(req, loginSchema);
-        const tokens = await authService.login(body);
+        const { accessToken, refreshToken } = await authService.login(body);
 
-        return sendAuthTokens(res, tokens);
+        res.cookie(REFRESH_TOKEN_COOKIE, refreshToken, {
+            httpOnly: true,
+            maxAge: ms(config.jwt.refreshExpire)
+        });
+
+        return sendResponse(res, {
+            message: 'Successfully logged in',
+            data: { accessToken }
+        });
     }
 
     @ReqHandler('POST', '/register')
