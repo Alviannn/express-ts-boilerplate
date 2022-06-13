@@ -8,7 +8,7 @@ export class TrackingEmbed {
     createdAt!: DateTime;
 
     @UpdateDateColumn({ name: 'updated_at', transformer: dateTransformer })
-    updatedAt?: DateTime;
+    updatedAt!: DateTime;
 
     @DeleteDateColumn({ name: 'deleted_at', transformer: dateTransformer })
     deletedAt?: DateTime;
