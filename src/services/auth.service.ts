@@ -60,11 +60,18 @@ class AuthService {
         await foundToken?.remove();
     }
 
+    async refresh(payload: UserPayload) {
+        return authService.generateToken(payload, 'ACCESS');
+    }
+
     async hashPassword(password: string) {
         return bcrypt.hash(password, config.hashRounds);
     }
 
-    async generateToken(user: User | UserPayload, tokenType: TokenType) {
+    private async generateToken(
+        user: User | UserPayload,
+        tokenType: TokenType) {
+
         let tokenSecret: string;
 
         const signOption: jwt.SignOptions = { notBefore: config.jwt.notBefore };
