@@ -18,7 +18,7 @@ export class Todo extends BaseEntity {
 
     @ManyToOne(() => User, (user) => user.todoList)
     @JoinColumn({ name: 'user_id' })
-    user!: User;
+    user?: User;
 
     @Column({ length: 512 })
     content!: string;
@@ -31,7 +31,13 @@ export class Todo extends BaseEntity {
 
     toJSON() {
         const cloned = { ...this } as Record<string, unknown>;
-        delete cloned.user;
+
+        delete cloned.userId;
+        cloned.user = {
+            id: this.user?.id,
+            fullName: this.user?.fullName,
+            email: this.user?.email
+        };
 
         return cloned;
     }
