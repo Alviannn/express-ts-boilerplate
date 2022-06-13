@@ -1,11 +1,9 @@
 import { User } from './user.entity';
-import { DateTime } from 'luxon';
-import { dateTransformer } from '.';
+import { TrackingEmbed } from './embedded/tracking.embed';
 
 import {
     Entity, BaseEntity,
     Column, JoinColumn, PrimaryGeneratedColumn,
-    CreateDateColumn, UpdateDateColumn, DeleteDateColumn,
     ManyToOne
 } from 'typeorm';
 
@@ -28,14 +26,8 @@ export class Todo extends BaseEntity {
     @Column({ name: 'is_done', default: false })
     isDone!: boolean;
 
-    @CreateDateColumn({ name: 'created_at', transformer: dateTransformer })
-    createdAt!: DateTime;
-
-    @UpdateDateColumn({ name: 'updated_at', transformer: dateTransformer })
-    updatedAt?: DateTime;
-
-    @DeleteDateColumn({ name: 'deleted_at', transformer: dateTransformer })
-    deletedAt?: DateTime;
+    @Column(() => TrackingEmbed, { prefix: false })
+    track!: TrackingEmbed;
 
     toJSON() {
         const cloned = { ...this } as Record<string, unknown>;

@@ -1,12 +1,10 @@
 import { Todo } from './todo.entity';
-import { DateTime } from 'luxon';
-import { dateTransformer } from '.';
+import { TrackingEmbed } from './embedded/tracking.embed';
 
 import {
     Entity, BaseEntity,
     Column, PrimaryGeneratedColumn,
-    CreateDateColumn, UpdateDateColumn, DeleteDateColumn,
-    OneToMany
+    OneToMany,
 } from 'typeorm';
 
 @Entity('users')
@@ -30,14 +28,8 @@ export class User extends BaseEntity {
     @Column({ length: 64 })
     password!: string;
 
-    @CreateDateColumn({ name: 'created_at', transformer: dateTransformer })
-    createdAt!: DateTime;
-
-    @UpdateDateColumn({ name: 'updated_at', transformer: dateTransformer })
-    updatedAt?: DateTime;
-
-    @DeleteDateColumn({ name: 'deleted_at', transformer: dateTransformer })
-    deletedAt?: DateTime;
+    @Column(() => TrackingEmbed, { prefix: false })
+    track!: TrackingEmbed;
 
     toJSON() {
         const cloned = { ...this } as Record<string, unknown>;
