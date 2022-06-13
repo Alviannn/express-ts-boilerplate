@@ -60,7 +60,7 @@ class TodoService {
             throw TodoNotFoundError;
         }
 
-        await todo.remove();
+        await todo.softRemove();
     }
 
     async get(userId: number, todoId: number) {
