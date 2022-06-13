@@ -1,12 +1,19 @@
 import dotenv from 'dotenv';
-
 import type { CorsOptions } from 'cors';
 
 dotenv.config();
 
 const { env } = process;
+const whitelistOrigin = ['http://localhost:3000'];
+
 const corsOption: CorsOptions = {
-    origin: '*',
+    origin: (origin, callback) => {
+        if (!origin || !whitelistOrigin.includes(origin)) {
+            return callback(null, false);
+        }
+
+        return callback(null, origin);
+    },
     /** Some legacy browsers (IE11, various SmartTVs) choke on 204 */
     optionsSuccessStatus: 200,
     preflightContinue: true,
