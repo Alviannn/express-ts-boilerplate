@@ -26,9 +26,7 @@ const config = {
         refreshSecret: env.JWT_REFRESH_SECRET!,
 
         accessExpire: env.JWT_ACCESS_EXPIRE!,
-        refreshExpire: env.JWT_REFRESH_EXPIRE!,
-
-        notBefore: '3s'
+        refreshExpire: env.JWT_REFRESH_EXPIRE!
     },
     hashRounds: 12,
     db: {
