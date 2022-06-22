@@ -15,37 +15,37 @@ import { DateTime } from 'luxon';
 
 const DEFAULT_PHONE = '628174991828';
 
-function randomRange(min: number, max: number) {
-    return Math.floor(Math.random() * (max - min + 1) + min);
-}
-
 async function insertData() {
+    const { hashPassword } = authService;
+
     const users: User[] = [
         User.create({
             fullName: 'John Doe',
             email: 'john_doe@example.com',
             phone: DEFAULT_PHONE,
-            password: await authService.hashPassword('JohnDoe123?')
+            password: await hashPassword('JohnDoe123?')
         }),
         User.create({
             fullName: 'Alvian',
             email: 'alvian@example.com',
             phone: DEFAULT_PHONE,
-            password: await authService.hashPassword('Alvian123?')
+            password: await hashPassword('Alvian123?')
         })
     ];
     await User.save(users);
 
     const todos: Todo[] = [
         Todo.create({
-            user: users[randomRange(0, users.length - 1)],
+            user: users[0],
             content: 'Play VALORANT tonight'
         }),
         Todo.create({
-            user: users[randomRange(0, users.length - 1)],
+            user: users[1],
             content: 'Do android mobile homework',
-            updatedAt: DateTime.utc().minus({ days: 2, hours: 6 }),
-            createdAt: DateTime.utc().minus({ days: 3 })
+            track: {
+                updatedAt: DateTime.utc().minus({ days: 2, hours: 6 }),
+                createdAt: DateTime.utc().minus({ days: 3 })
+            }
         })
     ];
     await Todo.save(todos);
