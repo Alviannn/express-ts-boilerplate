@@ -15,10 +15,10 @@ type ORMPathType = 'entities' | 'migrations' | 'subscribers';
  * * It accepts from the `src` folder and searches for `.ts` files
  *
  * For production environment:
- * * It accepts from the `dist` folder and searches for `.js` files
+ * * It accepts from the `build` folder and searches for `.js` files
  */
 function pathToLoadORM(type: ORMPathType) {
-    const startDir = (config.isDev ? 'src' : 'dist');
+    const startDir = (config.isDev ? 'src' : 'build');
 
     let middleExt: string;
     const lastExt = (config.isDev ? 'ts' : 'js');
