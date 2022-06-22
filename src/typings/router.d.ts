@@ -97,15 +97,6 @@ export interface ControllerOptions {
      * means that the API endpoint have a new big/major changes.
      * The major version is the same from {@link https://semver.org/}.
      *
-     * Here's an example, on the v1 endpoint, let's say you have a popular API
-     * but you wrote a bad endpoint path and you want to fix it.
-     * Since many people uses your API, you can't just modify it.
-     *
-     * Therefore, you need to make a new API in v2 and suggests your users
-     * to use it slowly by giving more time. Once everyone has moved to
-     * v2 or at least ready, you can then remove v1 route or maybe keep it,
-     * it's up to you.
-     *
      * From:
      * ```txt
      * POST /v1/todo/add
