@@ -57,7 +57,7 @@ To see the dependencies used in this boilerplate, [go here](#dependencies).
         |--decorators\    # Custom decorators
         |--routes\        # Server routes, provides automatic routing
     |--middlewares\       # Custom middlewares
-    |--service\           # Business logic (service layer)
+    |--services\           # Business logic (service layer)
     |--typings\           # Custom types/interface for type assertion
     |--utils\             # Utility functions and/or classes
     |--validations\       # Schemas for validating JSON requests
