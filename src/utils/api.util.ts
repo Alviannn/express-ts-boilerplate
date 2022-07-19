@@ -1,5 +1,6 @@
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import errorHandling from '../middlewares/error-handler.middleware';
 import { StatusCodes } from 'http-status-codes';
-
 import type { Response } from 'express';
 
 export const REFRESH_TOKEN_COOKIE = 'refreshToken';
@@ -12,10 +13,9 @@ export interface APIResponse<T = unknown> {
 }
 
 /**
- * Sends a JSON response
- *
- * The usual way doesn't have any template to sending responses,
- * therefore you don't get help from the autocomplete.
+ * Sends a JSON response with standardization.
+ * Normally, there aren't any template to send responses,
+ * so you don't get the help from the autocomplete.
  */
 export function sendResponse<T>(res: Response, params: APIResponse<T>) {
     const { statusCode, success, ...newParams } = params;
@@ -37,6 +37,8 @@ export function sendResponse<T>(res: Response, params: APIResponse<T>) {
  * Instead of using `try-catch` and call {@link sendResponse} on every error,
  * we could just make a error handler (for express.js) and use this class
  * to create the same effect.
+ *
+ * @see {@link errorHandling} for the error middleware implementation.
  */
 export class ResponseError extends Error {
 

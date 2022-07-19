@@ -19,6 +19,11 @@ const customTimestampFormat = format((info) => {
     return info;
 });
 
+/**
+ * The default logger for logging.
+ * Usually we will use the {@link logger.info} for a simple log,
+ * and {@link logger.debug} for debugging, the others are up to you.
+ */
 const logger = createLogger({
     level: (config.isDev ? 'debug' : 'info'),
     format: customTimestampFormat(),
