@@ -34,7 +34,7 @@
         "@types/node": "^18.0.6",
         "@types/pg": "^8.6.5",
         "@typescript-eslint/eslint-plugin": "^5.30.7",
-        "@typescript-eslint/parser": "^5.30.6",
+        "@typescript-eslint/parser": "^5.30.7",
         "cross-env": "^7.0.3",
         "eslint": "^8.20.0",
         "eslint-import-resolver-typescript": "^3.2.7",
