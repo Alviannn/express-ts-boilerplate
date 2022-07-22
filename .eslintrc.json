@@ -41,6 +41,7 @@
         "@typescript-eslint/member-delimiter-style": ["error"],
         "@typescript-eslint/consistent-type-imports": ["error", { "prefer": "type-imports" }],
         "@typescript-eslint/consistent-type-exports": ["error", { "fixMixedExportsWithInlineTypeSpecifier": true }],
+        "@typescript-eslint/comma-dangle": ["error", "always-multiline"],
 
         // import
         "import/first": "error",
@@ -60,7 +61,6 @@
         "no-return-assign": "error",
         "no-return-await": "error",
         "no-useless-concat": "error",
-        "no-useless-constructor": "error",
         "no-useless-return": "error",
         "no-useless-call": "error",
         "no-unused-expressions": "error",
@@ -78,7 +78,6 @@
         "no-label-var": "error",
         "no-lone-blocks": "error",
         "no-self-compare": "error",
-        "no-empty-function": "warn",
         "no-template-curly-in-string": "error",
         "no-whitespace-before-property": "error",
         "no-octal-escape": "error",

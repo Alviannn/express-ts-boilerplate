@@ -25,7 +25,7 @@ export function sendResponse<T>(res: Response, params: APIResponse<T>) {
 
     const response = {
         status: (isSuccess ? 'success' : 'fail'),
-        ...newParams
+        ...newParams,
     };
 
     return res.status(code).json(response);
@@ -59,7 +59,7 @@ export class ResponseError extends Error {
         return {
             statusCode: error.statusCode,
             success: false,
-            message: error.message
+            message: error.message,
         };
     }
 
@@ -93,5 +93,5 @@ export const Errors = {
      */
     USER_NOT_FOUND: new ResponseError(
         'Cannot find user',
-        StatusCodes.NOT_FOUND)
+        StatusCodes.NOT_FOUND),
 };

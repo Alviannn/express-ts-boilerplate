@@ -45,7 +45,7 @@ export const loginSchema = joi.object<LoginType>({
     password: joi.string()
         .min(8)
         .max(64)
-        .required()
+        .required(),
 });
 
 export const registerSchema = joi.object<RegisterType>({
@@ -66,5 +66,5 @@ export const registerSchema = joi.object<RegisterType>({
         .custom(validatePhone)
         .rule({ message: '{#label} must only be numbers' })
 
-        .required()
+        .required(),
 });

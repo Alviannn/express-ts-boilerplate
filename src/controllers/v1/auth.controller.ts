@@ -10,12 +10,12 @@ import { validate } from '../../utils/validate.util';
 
 import {
     Controller,
-    ReqHandler
+    ReqHandler,
 } from '../../internals/decorators/express.decorator';
 
 import {
     sendResponse,
-    REFRESH_TOKEN_COOKIE
+    REFRESH_TOKEN_COOKIE,
 } from '../../utils/api.util';
 
 @Controller({ path: 'auth' })
@@ -28,12 +28,12 @@ export class AuthController {
 
         res.cookie(REFRESH_TOKEN_COOKIE, refreshToken, {
             httpOnly: true,
-            maxAge: ms(config.jwt.refreshExpire)
+            maxAge: ms(config.jwt.refreshExpire),
         });
 
         return sendResponse(res, {
             message: 'Successfully logged in',
-            data: { accessToken }
+            data: { accessToken },
         });
     }
 
@@ -44,7 +44,7 @@ export class AuthController {
 
         return sendResponse(res, {
             statusCode: StatusCodes.CREATED,
-            message: 'Successfully registered new user'
+            message: 'Successfully registered new user',
         });
     }
 
@@ -55,7 +55,7 @@ export class AuthController {
 
         return sendResponse(res, {
             message: 'Successfully refreshed new token',
-            data: { accessToken }
+            data: { accessToken },
         });
     }
 
@@ -68,7 +68,7 @@ export class AuthController {
 
         return sendResponse(res, {
             statusCode: StatusCodes.ACCEPTED,
-            message: 'Successfully logged out'
+            message: 'Successfully logged out',
         });
     }
 

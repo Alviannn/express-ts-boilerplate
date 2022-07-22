@@ -50,5 +50,5 @@ export const appDataSource = new DataSource({
     synchronize: config.isDev,
     entities: [pathToLoadORM('entities')],
     migrations: [pathToLoadORM('migrations')],
-    subscribers: [pathToLoadORM('subscribers')]
+    subscribers: [pathToLoadORM('subscribers')],
 });

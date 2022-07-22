@@ -20,7 +20,7 @@ import type {
     HandlerMeta,
     HandlerFn,
     ExpressRouter,
-    WrappedHandlerFn
+    WrappedHandlerFn,
 } from '../../typings/router';
 
 /**
@@ -52,7 +52,7 @@ function mapRequestHandlers(
         path: handlerPath,
         middlewares,
         fnName,
-        method
+        method,
     } = handlerMeta;
 
     const handlerFn = controller.instance[fnName] as HandlerFn;

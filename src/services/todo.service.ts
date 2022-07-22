@@ -18,11 +18,11 @@ class TodoService {
         return {
             where: {
                 id: todoId,
-                userId
+                userId,
             },
             relations: {
-                user: true
-            }
+                user: true,
+            },
         };
     }
 

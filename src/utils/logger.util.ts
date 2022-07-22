@@ -8,7 +8,7 @@ const DATETIME_FORMAT = 'yyyy-MM-dd - HH:mm:ss ZZ';
 
 function customPrintFormat() {
     return format.printf(
-        ({ level, message, timestamp }) => `[${timestamp}] ${level}: ${message}`
+        ({ level, message, timestamp }) => `[${timestamp}] ${level}: ${message}`,
     );
 }
 
@@ -31,12 +31,12 @@ const logger = createLogger({
         new transports.DailyRotateFile({
             dirname: './logs',
             filename: '%DATE%.log',
-            format: customPrintFormat()
+            format: customPrintFormat(),
         }),
         new transports.Console({
-            format: format.combine(format.colorize(), customPrintFormat())
-        })
-    ]
+            format: format.combine(format.colorize(), customPrintFormat()),
+        }),
+    ],
 });
 
 export default logger;

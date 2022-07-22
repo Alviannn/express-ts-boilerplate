@@ -12,7 +12,7 @@ import type {
     ControllerOptions,
     ClassType,
     ControllerMeta,
-    HandlerMeta
+    HandlerMeta,
 } from '../../typings/router';
 
 /**
@@ -21,7 +21,7 @@ import type {
  */
 export const routeMeta = {
     controllers: new Map<ClassType, ControllerMeta>(),
-    handlers: new Map<ClassType, HandlerMeta[]>()
+    handlers: new Map<ClassType, HandlerMeta[]>(),
 };
 
 /**
@@ -53,7 +53,7 @@ export function Controller(options: ControllerOptions): ClassDecorator {
         controllers.set(target, {
             path: `/v${version ?? 1}/${path}`,
             middlewares: middlewares ?? [],
-            instance
+            instance,
         });
     };
 }
@@ -115,7 +115,7 @@ export function ReqHandler(
             path,
             method,
             fnName: handlerFn,
-            middlewares
+            middlewares,
         });
     };
 }

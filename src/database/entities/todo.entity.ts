@@ -4,7 +4,7 @@ import { TrackingEmbed } from './embedded/tracking.embed';
 import {
     Entity, BaseEntity,
     Column, JoinColumn, PrimaryGeneratedColumn,
-    ManyToOne
+    ManyToOne,
 } from 'typeorm';
 
 @Entity('todos')
@@ -36,7 +36,7 @@ export class Todo extends BaseEntity {
         cloned.user = {
             id: this.user?.id,
             fullName: this.user?.fullName,
-            email: this.user?.email
+            email: this.user?.email,
         };
 
         return cloned;

@@ -10,14 +10,14 @@ const LOGGING_FORMAT =
 const streamOptions: StreamOptions = {
     write(str) {
         logger.info(str.trim());
-    }
+    },
 };
 
 const handleLogging = morgan(
     LOGGING_FORMAT,
     {
-        stream: streamOptions
-    }
+        stream: streamOptions,
+    },
 );
 
 export default handleLogging;

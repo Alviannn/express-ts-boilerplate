@@ -13,7 +13,7 @@ import type {
     NextFunction,
     // ignore to allow linking on documentation
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    Router
+    Router,
 } from 'express';
 
 /**

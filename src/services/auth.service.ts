@@ -54,7 +54,7 @@ class AuthService {
 
     async logout(refreshToken: string) {
         const foundToken = await RefreshToken.findOneBy({
-            token: refreshToken
+            token: refreshToken,
         });
 
         await foundToken?.remove();

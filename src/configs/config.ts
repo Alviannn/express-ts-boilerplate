@@ -17,7 +17,7 @@ const corsOption: CorsOptions = {
     /** Some legacy browsers (IE11, various SmartTVs) choke on 204 */
     optionsSuccessStatus: 200,
     preflightContinue: true,
-    credentials: true
+    credentials: true,
 };
 
 const config = {
@@ -26,7 +26,7 @@ const config = {
         refreshSecret: env.JWT_REFRESH_SECRET!,
 
         accessExpire: env.JWT_ACCESS_EXPIRE!,
-        refreshExpire: env.JWT_REFRESH_EXPIRE!
+        refreshExpire: env.JWT_REFRESH_EXPIRE!,
     },
     hashRounds: 12,
     db: {
@@ -34,10 +34,10 @@ const config = {
         port: parseInt(env.DB_PORT!),
         database: env.DB_DATABASE!,
         username: env.DB_USERNAME!,
-        password: env.DB_PASSWORD!
+        password: env.DB_PASSWORD!,
     },
     cors: corsOption,
-    isDev: (env.NODE_ENV === 'development')
+    isDev: (env.NODE_ENV === 'development'),
 };
 
 export default config;

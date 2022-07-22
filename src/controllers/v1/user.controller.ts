@@ -6,7 +6,7 @@ import { userService } from '../../services/user.service';
 
 import {
     Controller,
-    ReqHandler
+    ReqHandler,
 } from '../../internals/decorators/express.decorator';
 
 @Controller({ path: 'users' })
@@ -19,7 +19,7 @@ export class UserController {
 
         return sendResponse(res, {
             message: 'Successfully found user data',
-            data: { user }
+            data: { user },
         });
     }
 

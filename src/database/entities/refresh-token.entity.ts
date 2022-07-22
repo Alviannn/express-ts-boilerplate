@@ -3,7 +3,7 @@ import { User } from './user.entity';
 
 import {
     Entity, BaseEntity,
-    PrimaryColumn, Column, ManyToOne, JoinColumn
+    PrimaryColumn, Column, ManyToOne, JoinColumn,
 } from 'typeorm';
 
 @Entity('refresh_tokens')

@@ -3,7 +3,7 @@ import logger from '../utils/logger.util';
 import { StatusCodes } from 'http-status-codes';
 import {
     ResponseError,
-    sendResponse, Errors
+    sendResponse, Errors,
 } from '../utils/api.util';
 
 import type { Request, Response, NextFunction } from 'express';

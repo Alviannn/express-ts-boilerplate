@@ -7,13 +7,13 @@ import { todoService } from '../../services/todo.service';
 
 import {
     Controller,
-    ReqHandler
+    ReqHandler,
 } from '../../internals/decorators/express.decorator';
 
 import {
     newTodoSchema,
     updateTodoSchema,
-    todoIdSchema
+    todoIdSchema,
 } from '../../validations/todo.validation';
 
 import { validate } from '../../utils/validate.util';
@@ -28,7 +28,7 @@ export class TodoController {
 
         return sendResponse(res, {
             message: 'Successfully found todos',
-            data: { todos }
+            data: { todos },
         });
     }
 
@@ -42,7 +42,7 @@ export class TodoController {
         return sendResponse(res, {
             message: 'Successfully added new todo',
             statusCode: StatusCodes.CREATED,
-            data: { todoId }
+            data: { todoId },
         });
     }
 
@@ -55,7 +55,7 @@ export class TodoController {
 
         return sendResponse(res, {
             message: 'Successfully found todo',
-            data: { todo }
+            data: { todo },
         });
     }
 
@@ -69,7 +69,7 @@ export class TodoController {
         return sendResponse(res, { message: 'Successfully deleted a todo' });
     }
 
-    @ReqHandler('PATCH', '/:todoId',)
+    @ReqHandler('PATCH', '/:todoId')
     async update(req: Request, res: Response) {
         const { todoId } = validate(req, todoIdSchema, 'params');
         const { content, isDone } = validate(req, updateTodoSchema);
